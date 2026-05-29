@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Study Planner - Master Edition</title>
+    <title>AI Horizon Study Coach</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -18,6 +18,7 @@
             --accent: #10b981;
             --card-inner: #ffffff;
             --danger: #ef4444;
+            --warning: #f59e0b;
         }
 
         [data-theme="dark"] {
@@ -31,6 +32,7 @@
             --accent: #34d399;
             --card-inner: rgba(15, 23, 42, 0.3);
             --danger: #f87171;
+            --warning: #fbbf24;
         }
 
         body {
@@ -38,14 +40,14 @@
             background: var(--bg-gradient);
             color: var(--text-main);
             margin: 0;
-            padding: 10px; /* Suggestion 2: Compact mobile padding */
+            padding: 10px;
             min-height: 100vh;
             transition: background 0.3s, color 0.3s;
         }
 
         .container { max-width: 1200px; margin: 0 auto; }
         nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .logo { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 6px; }
+        .logo { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 6px; color: var(--primary); }
         
         .nav-right { display: flex; gap: 8px; }
         .theme-toggle, .streak-badge {
@@ -70,16 +72,17 @@
         label { display: block; margin-bottom: 4px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
         .input-wrapper { position: relative; }
         .input-wrapper i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        input {
+        
+        input, select {
             width: 100%; padding: 10px 12px 10px 38px; background: var(--card-inner);
             border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);
             font-size: 0.95rem; box-sizing: border-box; transition: all 0.2s;
         }
-        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+        select { padding-left: 34px; appearance: none; -webkit-appearance: none; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
         
-        /* Suggestion 3: Inline Error Message Styles */
         .error-msg { color: var(--danger); font-size: 0.75rem; font-weight: 600; margin-top: 4px; display: none; }
-        input.invalid { border-color: var(--danger); }
+        input.invalid, select.invalid { border-color: var(--danger); }
 
         .btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
         button.main-btn {
@@ -92,17 +95,17 @@
         }
         button.secondary-btn:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
 
-        /* Output View Dashboard */
+        /* Output Dashboard View */
         .output-dashboard { display: none; }
         .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px; }
 
-        /* Suggestion 2: Responsive Stacked Grid Elements on Mobile */
+        /* Stage 2 Redesign: Today's Mission Cards Layout */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
         @media (min-width: 480px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
-        .stat-card { background: var(--card-inner); border: 1px solid var(--border-color); padding: 10px; border-radius: 10px; text-align: center; }
-        .stat-card .icon { font-size: 1.1rem; margin-bottom: 2px; }
-        .stat-card .val { font-size: 1rem; font-weight: 700; color: var(--text-main); }
-        .stat-card .lbl { font-size: 0.7rem; color: var(--text-muted); }
+        .stat-card { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center; }
+        .stat-card .icon { font-size: 1.2rem; margin-bottom: 2px; }
+        .stat-card .val { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
+        .stat-card .lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
         /* Progress Bar Module */
         .progress-container { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 15px; }
@@ -115,25 +118,25 @@
         .dist-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; }
         .dist-pct { color: var(--primary); font-weight: 700; }
 
-        /* Suggestion 2: Better mobile actions sizing and packing */
         .export-actions { display: flex; gap: 6px; margin-bottom: 15px; width: 100%; }
         .action-btn { background: var(--card-inner); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; min-width: 0; }
         .action-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
         .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin: 15px 0 8px 0; border-left: 3px solid var(--primary); padding-left: 6px; font-weight: 700; }
 
+        /* Stage 2: Today's Mission Interactive Checkboxes */
         .tracker-list { display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 15px; }
         @media(min-width: 480px) { .tracker-list { grid-template-columns: repeat(2, 1fr); } }
-        .tracker-item { display: flex; align-items: center; gap: 8px; background: var(--card-inner); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.8rem; }
+        .tracker-item { display: flex; align-items: center; gap: 8px; background: var(--card-inner); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
         .tracker-item input { width: auto; margin: 0; }
-        .tracker-item.completed { opacity: 0.6; text-decoration: line-through; border-color: var(--accent); }
+        .tracker-item.completed { opacity: 0.6; text-decoration: line-through; border-color: var(--accent); background: rgba(16, 185, 129, 0.03); }
 
         .timeline-item { background: var(--card-inner); padding: 10px 12px; border-radius: 8px; border-left: 4px solid var(--primary); margin-bottom: 6px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
         .time-tag { font-weight: 700; font-size: 0.8rem; color: var(--primary); }
         .timeline-item h4 { margin: 1px 0; font-size: 0.9rem; }
         .timeline-item p { margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
 
-        /* Suggestion 6: Smart Weekly Calendar Blocks */
+        /* Weekly Calendar Block View Matrix */
         .calendar-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 8px; }
         @media(min-width: 550px) { .calendar-grid { grid-template-columns: repeat(5, 1fr); } }
         .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; text-align: center; }
@@ -148,9 +151,9 @@
 
 <div class="container">
     <nav>
-        <div class="logo"><i class="fa-solid fa-graduation-cap"></i> Smart Study Planner</div>
+        <div class="logo"><i class="fa-solid fa-compass"></i> AI Horizon Study Coach</div>
         <div class="nav-right">
-            <div class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="streakDisplay">Streak: 1 Day</span></div>
+            <div class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="streakDisplay">Streak: 0 Days</span></div>
             <button class="theme-toggle" onclick="toggleTheme()">
                 <i class="fa-solid fa-moon"></i> <span id="themeText">Dark Mode</span>
             </button>
@@ -158,42 +161,53 @@
     </nav>
 
     <header>
-        <h1>🎯 Smart Study Planner</h1>
-        <p>Your Personalized System Architecture & Goal Tracker</p>
+        <h1>🎯 AI Horizon Study Coach</h1>
+        <p>Custom Tailored Strategic Learning Roadmaps for All Lifelong Learners</p>
     </header>
 
     <div class="grid-layout">
         <div class="glass-panel" id="inputFormPanel">
             <div class="form-group">
-                <label>Student Name</label>
+                <label>Learner Name</label>
                 <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="studentName" placeholder="Your Name"></div>
-                <div class="error-msg" id="err_studentName">Student name is required</div>
+                <div class="error-msg" id="err_studentName">Learner name is required</div>
             </div>
             <div class="form-group">
-                <label>Subjects (e.g., Python, SQL)</label>
-                <div class="input-wrapper"><i class="fa-solid fa-book"></i><input type="text" id="subjects" placeholder="Python, SQL, Stats"></div>
-                <div class="error-msg" id="err_subjects">Please specify at least one core topic</div>
+                <label>Topics / Subjects to Master</label>
+                <div class="input-wrapper"><i class="fa-solid fa-book"></i><input type="text" id="subjects" placeholder="e.g., Python, UI Design, Marketing"></div>
+                <div class="error-msg" id="err_subjects">Please specify at least one target topic</div>
             </div>
             <div class="form-group">
-                <label>Daily Study Hours</label>
-                <div class="input-wrapper"><i class="fa-solid fa-clock"></i><input type="number" id="hours" placeholder="e.g., 4" min="1" max="16"></div>
+                <label>Daily Commitment Hours</label>
+                <div class="input-wrapper"><i class="fa-solid fa-clock"></i><input type="number" id="hours" placeholder="e.g., 3" min="1" max="16"></div>
                 <div class="error-msg" id="err_hours">Enter target hours between 1 and 16</div>
             </div>
             <div class="form-group">
-                <label>Exam Date</label>
-                <div class="input-wrapper"><i class="fa-solid fa-calendar"></i><input type="date" id="examDate"></div>
-                <div class="error-msg" id="err_examDate">Please select a valid future date</div>
+                <label>Target Timeline (In Months)</label>
+                <div class="input-wrapper"><i class="fa-solid fa-hourglass-half"></i><input type="number" id="timelineMonths" placeholder="e.g., 3 Months" min="1" max="24"></div>
+                <div class="error-msg" id="err_timelineMonths">Please select a timeline between 1 to 24 months</div>
             </div>
             <div class="form-group">
-                <label>Weak Subject / Topic</label>
-                <div class="input-wrapper"><i class="fa-solid fa-triangle-exclamation"></i><input type="text" id="weakSubjects" placeholder="e.g., Stats"></div>
+                <label>Learning Pace Preference</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-gauge-high"></i>
+                    <select id="learningPace">
+                        <option value="balanced">Balanced Strategy (Standard)</option>
+                        <option value="slow">Deep Focus (Slow & Steady)</option>
+                        <option value="fast">Sprint Mode (Fast Track)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Weak / Focus Areas (Optional)</label>
+                <div class="input-wrapper"><i class="fa-solid fa-triangle-exclamation"></i><input type="text" id="weakSubjects" placeholder="e.g., Pointers, Data Structs"></div>
             </div>
             
             <div class="btn-group">
                 <button class="main-btn" onclick="validateAndBuild()">
-                    <span>Compute Plan Matrix</span><i class="fa-solid fa-bolt"></i>
+                    <span>Formulate Learning Matrix</span><i class="fa-solid fa-bolt"></i>
                 </button>
-                <button class="secondary-btn" id="resetBtn" onclick="resetPlanFlow()">Reset Fields</button>
+                <button class="secondary-btn" id="resetBtn" onclick="resetPlanFlow()">Reset Workspace</button>
             </div>
         </div>
 
@@ -201,38 +215,38 @@
             <div id="printArea">
                 <div class="dash-header">
                     <div>
-                        <h2 style="margin:0; font-size:1.2rem;" id="outName">Control Room</h2>
+                        <h2 style="margin:0; font-size:1.2rem;" id="outName">Learning Command Room</h2>
                         <span id="outSubjects" style="font-size:0.75rem; color:var(--text-muted);">Active Tracks</span>
                     </div>
-                    <div class="badge" id="outBadge">0 Days Left</div>
+                    <div class="badge" id="outBadge" style="background:rgba(79, 70, 229, 0.1); color:var(--primary); border-color:var(--primary);">Self-Paced Track</div>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="icon">📚</div>
+                        <div class="icon">🔥</div>
+                        <div class="val" id="statStreak">0 Days</div>
+                        <div class="lbl">Study Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">⏳</div>
                         <div class="val" id="statTotalHours">0h</div>
-                        <div class="lbl">Est. Total Hours</div>
+                        <div class="lbl">Total Hours Est.</div>
                     </div>
                     <div class="stat-card">
-                        <div class="icon">📅</div>
-                        <div class="val" id="statDaysLeft">0</div>
-                        <div class="lbl">Days Left</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon">🎯</div>
+                        <div class="icon">📊</div>
                         <div class="val" id="statCompletion">0%</div>
-                        <div class="lbl">Weekly Done</div>
+                        <div class="lbl">Today's Progress</div>
                     </div>
                     <div class="stat-card">
                         <div class="icon">⚠️</div>
-                        <div class="val" id="statWeakCount">0</div>
-                        <div class="lbl">Weak Tracks</div>
+                        <div class="val" id="statWeakCount">None</div>
+                        <div class="lbl">Weak Hotspots</div>
                     </div>
                 </div>
 
                 <div class="progress-container">
                     <div class="progress-header">
-                        <span>PREPARATION LEVEL ESTIMATION</span>
+                        <span>TIMELINE TRACKING PROGRESS STATUS</span>
                         <span id="progressPctText">0%</span>
                     </div>
                     <div class="progress-bar-wrapper">
@@ -240,22 +254,22 @@
                     </div>
                 </div>
 
-                <div class="section-title">Time Weight Resource Splits</div>
+                <div class="section-title">Topic Weight Resource Splits</div>
                 <div class="dist-container" id="distributionContainer"></div>
 
                 <div class="export-actions" data-html2pdf-ignore="true">
-                    <button class="action-btn" onclick="copyPlanToClipboard()"><i class="fa-regular fa-copy"></i> Copy</button>
+                    <button class="action-btn" onclick="copyPlanToClipboard()"><i class="fa-regular fa-copy"></i> Copy Matrix</button>
                     <button class="action-btn" onclick="downloadTxt()"><i class="fa-regular fa-file-lines"></i> TXT</button>
                     <button class="action-btn" onclick="downloadPdf()"><i class="fa-regular fa-file-pdf"></i> PDF</button>
                 </div>
 
-                <div class="section-title" data-html2pdf-ignore="true">Daily Tracking Checklists</div>
+                <div class="section-title" data-html2pdf-ignore="true">Today's Mission Tasks</div>
                 <div class="tracker-list" id="trackerList" data-html2pdf-ignore="true"></div>
 
-                <div class="section-title">Personalized Daily Schedule Breakdown</div>
+                <div class="section-title">Personalized Daily Time Allocations</div>
                 <div id="timelineContainer"></div>
 
-                <div class="section-title">Weekly Calendar Matrix Block View</div>
+                <div class="section-title">Weekly Subject Calendar Block View</div>
                 <div class="calendar-grid" id="calendarContainer"></div>
             </div>
         </div>
@@ -263,12 +277,11 @@
 </div>
 
 <footer>
-    <p>© 2026 Smart Study Planner Corporation. All rights reserved.</p>
+    <p>© 2026 AI Horizon Study Coach. Built for lifelong structured growth.</p>
     <p>
-        <a href="#" onclick="alert('Smart Study Planner: Formulating client-side algorithmic scheduling paths since 2026.')">About Engine</a> | 
-        <a href="#" onclick="alert('Privacy Policy: All typed parameter arrays remain locked inside client local browser cache.')">Privacy Policy</a> | 
-        <a href="#" onclick="alert('Support: connection-matrix@smartstudyplanner.io')">Contact Hub</a> | 
-        <a href="#" onclick="alert('Terms: Open source workflow tool built for fast conceptual tracking execution.')">Terms of Use</a>
+        <a href="#" onclick="alert('AI Horizon Coach: Dynamic client-side open learning systems engine framework.')">About</a> | 
+        <a href="#" onclick="alert('Privacy Parameters: Data arrays stay local in native browser cache configurations.')">Privacy Policy</a> | 
+        <a href="#" onclick="alert('Support: interface-engine@aihorizon.io')">Contact Hub</a>
     </p>
 </footer>
 
@@ -285,24 +298,26 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         if(savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         
-        let streak = parseInt(localStorage.getItem('user_streak')) || 1;
-        document.getElementById('streakDisplay').innerText = `Streak: ${streak} Days`;
+        // Stage 2: Genuine Streak Checking Module Setup
+        let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
+        document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
+        document.getElementById('statStreak').innerText = `${currentStreak} Days`;
 
-        document.getElementById('studentName').value = localStorage.getItem('m_name') || '';
-        document.getElementById('subjects').value = localStorage.getItem('m_subs') || '';
-        document.getElementById('hours').value = localStorage.getItem('m_hours') || '';
-        document.getElementById('examDate').value = localStorage.getItem('m_date') || '';
-        document.getElementById('weakSubjects').value = localStorage.getItem('m_weak') || '';
+        document.getElementById('studentName').value = localStorage.getItem('h_name') || '';
+        document.getElementById('subjects').value = localStorage.getItem('h_subs') || '';
+        document.getElementById('hours').value = localStorage.getItem('h_hours') || '';
+        document.getElementById('timelineMonths').value = localStorage.getItem('h_months') || '';
+        document.getElementById('weakSubjects').value = localStorage.getItem('h_weak') || '';
+        if(localStorage.getItem('h_pace')) document.getElementById('learningPace').value = localStorage.getItem('h_pace');
 
-        if(localStorage.getItem('m_name')) {
+        if(localStorage.getItem('h_name')) {
             validateAndBuild();
             document.getElementById('resetBtn').style.display = 'block';
         }
     };
 
-    // Suggestion 3: High Fidelity Form Inline Error Validations Mechanics
     function clearInlineErrors() {
-        const fields = ['studentName', 'subjects', 'hours', 'examDate'];
+        const fields = ['studentName', 'subjects', 'hours', 'timelineMonths'];
         fields.forEach(f => {
             document.getElementById(f).classList.remove('invalid');
             document.getElementById('err_' + f).style.display = 'none';
@@ -315,7 +330,8 @@
         const name = document.getElementById('studentName').value.trim();
         const subInput = document.getElementById('subjects').value.trim();
         const hours = parseFloat(document.getElementById('hours').value);
-        const examDateVal = document.getElementById('examDate').value;
+        const months = parseInt(document.getElementById('timelineMonths').value);
+        const pace = document.getElementById('learningPace').value;
         const weak = document.getElementById('weakSubjects').value.trim();
 
         let pass = true;
@@ -323,81 +339,73 @@
         if(!name) { document.getElementById('studentName').classList.add('invalid'); document.getElementById('err_studentName').style.display = 'block'; pass = false; }
         if(!subInput) { document.getElementById('subjects').classList.add('invalid'); document.getElementById('err_subjects').style.display = 'block'; pass = false; }
         if(isNaN(hours) || hours <= 0 || hours > 16) { document.getElementById('hours').classList.add('invalid'); document.getElementById('err_hours').style.display = 'block'; pass = false; }
-        
-        const today = new Date();
-        const exam = new Date(examDateVal);
-        const diffDays = Math.ceil((exam - today) / (1000 * 60 * 60 * 24));
-        
-        if(!examDateVal || diffDays < 0) { document.getElementById('examDate').classList.add('invalid'); document.getElementById('err_examDate').style.display = 'block'; pass = false; }
+        if(isNaN(months) || months <= 0 || months > 24) { document.getElementById('timelineMonths').classList.add('invalid'); document.getElementById('err_timelineMonths').style.display = 'block'; pass = false; }
 
-        if(!pass) return; // Halt flow execution smoothly without annoying old native alert boxes
+        if(!pass) return;
 
-        // Cache parameters safely
-        localStorage.setItem('m_name', name);
-        localStorage.setItem('m_subs', subInput);
-        localStorage.setItem('m_hours', hours);
-        localStorage.setItem('m_date', examDateVal);
-        localStorage.setItem('m_weak', weak);
+        // Secure parameters allocation safely inside local storage cache configurations
+        localStorage.setItem('h_name', name);
+        localStorage.setItem('h_subs', subInput);
+        localStorage.setItem('h_hours', hours);
+        localStorage.setItem('h_months', months);
+        localStorage.setItem('h_pace', pace);
+        localStorage.setItem('h_weak', weak);
         
         document.getElementById('resetBtn').style.display = 'block';
 
-        let streak = parseInt(localStorage.getItem('user_streak')) || 1;
-        if(Math.random() > 0.8) { streak += 1; localStorage.setItem('user_streak', streak); }
-        document.getElementById('streakDisplay').innerText = `Streak: ${streak} Days`;
-
         const subjectArray = subInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        const totalEstDays = months * 30;
+        const totalEstHours = Math.max(hours * totalEstDays, 0);
         
-        // Calculations updates
-        const totalEstHours = Math.max(hours * diffDays, 0);
         document.getElementById('statTotalHours').innerText = `${totalEstHours}h`;
-        document.getElementById('statDaysLeft').innerText = diffDays;
-        document.getElementById('statWeakCount').innerText = weak ? '1 Spot' : '0 Spots';
-        document.getElementById('outBadge').innerText = `${diffDays} Days Left`;
-        document.getElementById('outName').innerText = `${name}'s Control Panel`;
-        document.getElementById('outSubjects').innerText = `Active: ${subInput}`;
+        document.getElementById('statWeakCount').innerText = weak ? '1 Area' : 'None';
+        document.getElementById('outBadge').innerText = `${months} Month Track (${pace.toUpperCase()})`;
+        document.getElementById('outName').innerText = `${name}'s Mission Command`;
+        document.getElementById('outSubjects').innerText = `Target Tracks: ${subInput}`;
 
-        let progressPct = 30; 
-        if(diffDays < 15) progressPct = 85;
-        else if(diffDays < 45) progressPct = 55;
-        document.getElementById('progressPctText').innerText = `${progressPct}% Prep Level`;
-        document.getElementById('progressBarFill').style.width = `${progressPct}%`;
+        // Compute Flexible Completion Metrics Visualizations
+        let completionEstimationPct = 15;
+        if(pace === 'fast') completionEstimationPct = 45;
+        if(pace === 'slow') completionEstimationPct = 10;
+        document.getElementById('progressPctText').innerText = `${completionEstimationPct}% Mastery Estimated`;
+        document.getElementById('progressBarFill').style.width = `${completionEstimationPct}%`;
 
-        // Percent Weight Splits UI Display
+        // Splits Calculations
         let distributionHTML = '';
         if(weak) {
-            distributionHTML += `<div class="dist-row"><span style="font-weight:600;">⚠️ Weak Target [${weak}]</span><span class="dist-pct">40% Time Split</span></div>`;
-            const rem = 60; const share = Math.round(rem / subjectArray.length);
-            subjectArray.forEach(s => { distributionHTML += `<div class="dist-row"><span>📚 Core Track [${s}]</span><span class="dist-pct">${share}% Time Split</span></div>`; });
+            distributionHTML += `<div class="dist-row"><span style="font-weight:600;">⚠️ Focus Zone [${weak}]</span><span class="dist-pct">45% Weight</span></div>`;
+            const share = Math.round(55 / subjectArray.length);
+            subjectArray.forEach(s => { distributionHTML += `<div class="dist-row"><span>📚 Core Module [${s}]</span><span class="dist-pct">${share}% Weight</span></div>`; });
         } else {
             const share = Math.round(100 / subjectArray.length);
-            subjectArray.forEach(s => { distributionHTML += `<div class="dist-row"><span>📚 Core Track [${s}]</span><span class="dist-pct">${share}% Time Split</span></div>`; });
+            subjectArray.forEach(s => { distributionHTML += `<div class="dist-row"><span>📚 Core Module [${s}]</span><span class="dist-pct">${share}% Weight</span></div>`; });
         }
         document.getElementById('distributionContainer').innerHTML = distributionHTML;
 
-        // Formulate Timeline Schedule Flow
+        // Daily Formulations Injections Engine
         let remHours = hours - 0.5;
         let timelineHTML = `
-            <div class="timeline-item"><div class="time-tag">0.5 Hours (30 Mins)</div><h4>Mind Activation Routine</h4><p>Run fast flashcard scanning sequences to ignite memory retention patterns.</p></div>
+            <div class="timeline-item"><div class="time-tag">30 Mins</div><h4>Mind Activation Warmup Sequence</h4><p>Review core flashcards and technical schemas to clear cognitive fatigue blocks.</p></div>
         `;
         if(weak && remHours > 0) {
-            let wAlloc = parseFloat((remHours * 0.4).toFixed(1)); remHours = parseFloat((remHours - wAlloc).toFixed(1));
-            timelineHTML += `<div class="timeline-item" style="border-left-color: var(--danger);"><div class="time-tag">${wAlloc} Hours</div><h4>Weak Point Focus: [${weak}]</h4><p>Target tough modules specifically to eliminate cognitive bottlenecks fast.</p></div>`;
+            let wAlloc = parseFloat((remHours * 0.45).toFixed(1)); remHours = parseFloat((remHours - wAlloc).toFixed(1));
+            timelineHTML += `<div class="timeline-item" style="border-left-color: var(--danger);"><div class="time-tag">${wAlloc} Hours</div><h4>Focus Session Block: [${weak}]</h4><p>Target difficult application areas directly to overcome specific knowledge bottlenecks.</p></div>`;
         }
         if(subjectArray.length > 0 && remHours > 0) {
             const share = parseFloat((remHours / subjectArray.length).toFixed(1));
             subjectArray.forEach(s => {
                 if(share > 0) {
-                    timelineHTML += `<div class="timeline-item" style="border-left-color: #3b82f6;"><div class="time-tag">${share} Hours</div><h4>Domain Drilling: [${s}]</h4><p>Deep dive conceptual mechanics and practice workbook question sets.</p></div>`;
+                    timelineHTML += `<div class="timeline-item" style="border-left-color: #3b82f6;"><div class="time-tag">${share} Hours</div><h4>Core Domain Drilling: [${s}]</h4><p>Deep-dive conceptual materials, compile custom notes, and map execution setups.</p></div>`;
                 }
             });
         }
         document.getElementById('timelineContainer').innerHTML = timelineHTML;
 
-        // Dynamic Calendar Builder Blocks
-        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+        // Generate Weekly Calendar Block Matrix Matrix
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         let calHTML = '';
         days.forEach((d, i) => {
-            const task = subjectArray[i % subjectArray.length] || 'Revision';
+            const task = subjectArray[i % subjectArray.length] || 'General Synthesis';
             calHTML += `<div class="calendar-day"><div class="day-lbl">${d}</div><div class="day-task">${task}</div></div>`;
         });
         document.getElementById('calendarContainer').innerHTML = calHTML;
@@ -409,64 +417,81 @@
         dash.scrollIntoView({ behavior: 'smooth' });
     }
 
+    // Stage 2: Clean Dynamic Mission Checkboxes Setup
     function setupTrackerBoxes() {
-        const operations = ['Warmup Session Checked', 'Core Study Tracks Drilled', 'Weak Area Barrier Practice', 'Daily Revision Summary Locked'];
+        const missions = ['Warmup Session Complete', 'Core Domain Materials Drilled', 'Weak Area Hotspot Practice', 'Daily Revision Summary Logged'];
         let trackerHTML = ''; let ticked = 0;
-        operations.forEach((op, i) => {
-            const done = localStorage.getItem(`f_op_${i}`) === 'true'; if(done) ticked++;
+        
+        missions.forEach((m, i) => {
+            const done = localStorage.getItem(`h_miss_${i}`) === 'true'; if(done) ticked++;
             trackerHTML += `
                 <label class="tracker-item ${done ? 'completed' : ''}" id="lbl_${i}">
                     <input type="checkbox" id="chk_${i}" onchange="handleCheck(${i})" ${done ? 'checked' : ''}>
-                    <span>${op}</span>
+                    <span>${m}</span>
                 </label>
             `;
         });
         document.getElementById('trackerList').innerHTML = trackerHTML;
-        document.getElementById('statCompletion').innerText = `${Math.round((ticked / 4) * 100)}%`;
+        
+        const pct = Math.round((ticked / 4) * 100);
+        document.getElementById('statCompletion').innerText = `${pct}%`;
     }
 
+    // Stage 2: True Streak Increment System Verification Flow Models
     function handleCheck(i) {
         const box = document.getElementById(`chk_${i}`);
         const label = document.getElementById(`lbl_${i}`);
-        localStorage.setItem(`f_op_${i}`, box.checked);
+        localStorage.setItem(`h_miss_${i}`, box.checked);
         if(box.checked) label.classList.add('completed'); else label.classList.remove('completed');
         
-        let ticked = 0; for(let j=0; j<4; j++) { if(localStorage.getItem(`f_op_${j}`) === 'true') ticked++; }
-        document.getElementById('statCompletion').innerText = `${Math.round((ticked / 4) * 100)}%`;
+        let ticked = 0; 
+        for(let j=0; j<4; j++) { if(localStorage.getItem(`h_miss_${j}`) === 'true') ticked++; }
+        
+        const pct = Math.round((ticked / 4) * 100);
+        document.getElementById('statCompletion').innerText = `${pct}%`;
+
+        // Real Streak Calculation Logic Mechanism
+        if(pct === 100) {
+            let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
+            currentStreak += 1;
+            localStorage.setItem('real_streak_val', currentStreak);
+            document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
+            document.getElementById('statStreak').innerText = `${currentStreak} Days`;
+        }
     }
 
-    // Suggestion 5: Reset Functional flow logic
     function resetPlanFlow() {
         localStorage.clear();
         document.getElementById('studentName').value = '';
         document.getElementById('subjects').value = '';
         document.getElementById('hours').value = '';
-        document.getElementById('examDate').value = '';
+        document.getElementById('timelineMonths').value = '';
         document.getElementById('weakSubjects').value = '';
         clearInlineErrors();
         document.getElementById('outputDashboard').style.display = 'none';
         document.getElementById('resetBtn').style.display = 'none';
+        document.getElementById('streakDisplay').innerText = `Streak: 0 Days`;
+        document.getElementById('statStreak').innerText = `0 Days`;
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // Fully working exporter codes
     function copyPlanToClipboard() {
-        let txt = `=== SMART STUDY WORKSPACE MATRIX ===\n` + document.getElementById('printArea').innerText;
-        navigator.clipboard.writeText(txt).then(() => alert('📋 Workspace parameters copied successfully!'));
+        let txt = `=== AI HORIZON COACH ROADMAP ===\n` + document.getElementById('printArea').innerText;
+        navigator.clipboard.writeText(txt).then(() => alert('📋 Learning roadmap copied successfully!'));
     }
 
     function downloadTxt() {
-        let txt = `=== SMART STUDY WORKSPACE MATRIX ===\n` + document.getElementById('printArea').innerText;
+        let txt = `=== AI HORIZON COACH ROADMAP ===\n` + document.getElementById('printArea').innerText;
         const b = new Blob([txt], { type: 'text/plain' });
         const url = URL.createObjectURL(b);
-        const a = document.createElement('a'); a.href = url; a.download = 'study-roadmap.txt'; a.click();
+        const a = document.createElement('a'); a.href = url; a.download = 'learning-matrix.txt'; a.click();
     }
 
     function downloadPdf() {
         const element = document.getElementById('printArea');
-        document.documentElement.setAttribute('data-theme', 'light'); // Render standard white for professional layouts
+        document.documentElement.setAttribute('data-theme', 'light');
         const options = {
-            margin: 10, filename: 'smart-study-roadmap.pdf', image: { type: 'jpeg', quality: 0.98 },
+            margin: 10, filename: 'learning-roadmap.pdf', image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(options).from(element).save().then(() => {

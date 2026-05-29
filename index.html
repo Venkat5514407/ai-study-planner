@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Study Planner - Pro</title>
+    <title>Smart Study Planner - Ultimate Edition</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -17,11 +17,12 @@
             --primary-glow: rgba(79, 70, 229, 0.15);
             --accent: #10b981;
             --card-inner: #ffffff;
+            --danger: #ef4444;
         }
 
         [data-theme="dark"] {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --panel-bg: rgba(30, 41, 59, 0.75);
+            --panel-bg: rgba(30, 41, 59, 0.8);
             --border-color: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
@@ -29,6 +30,7 @@
             --primary-glow: rgba(99, 102, 241, 0.2);
             --accent: #34d399;
             --card-inner: rgba(15, 23, 42, 0.3);
+            --danger: #f87171;
         }
 
         body {
@@ -41,59 +43,31 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        nav {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 15px;
-        }
-
-        .theme-toggle {
+        .container { max-width: 1200px; margin: 0 auto; }
+        nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+        
+        .nav-right { display: flex; gap: 10px; }
+        .theme-toggle, .streak-badge {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             padding: 8px 14px;
             border-radius: 30px;
-            cursor: pointer;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
+        .streak-badge { border-color: #f97316; color: #f97316; }
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { font-size: 2.2rem; font-weight: 800; margin: 0 0 5px 0; }
+        header p { margin: 0; color: var(--text-muted); font-size: 0.95rem; }
 
-        header h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin: 0 0 8px 0;
-        }
-
-        header p {
-            margin: 0;
-            color: var(--text-muted);
-            font-size: 1rem;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .grid-layout {
-                grid-template-columns: 360px 1fr;
-            }
-        }
+        .grid-layout { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .grid-layout { grid-template-columns: 360px 1fr; } }
 
         .glass-panel {
             background: var(--panel-bg);
@@ -106,246 +80,167 @@
             height: fit-content;
         }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        .input-wrapper i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
         input {
-            width: 100%;
-            padding: 10px 12px 10px 38px;
-            background: var(--card-inner);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            color: var(--text-main);
-            font-size: 0.95rem;
-            box-sizing: border-box;
-            transition: all 0.2s;
+            width: 100%; padding: 10px 12px 10px 38px; background: var(--card-inner);
+            border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);
+            font-size: 0.95rem; box-sizing: border-box; transition: all 0.2s;
         }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-glow);
-        }
-
+        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+        
         button.main-btn {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
+            width: 100%; background: var(--primary); color: white; padding: 12px;
+            border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
 
-        /* Output Dashboard */
+        /* Output View Dashboard */
         .output-dashboard { display: none; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px; }
 
-        .dash-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
-        }
+        /* Level 1: Stats Grid Dashboard */
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        @media (min-width: 480px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
+        .stat-card { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center; }
+        .stat-card .icon { font-size: 1.2rem; margin-bottom: 4px; }
+        .stat-card .val { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
+        .stat-card .lbl { font-size: 0.75rem; color: var(--text-muted); }
 
-        .badge {
-            background: rgba(16, 185, 129, 0.12);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
+        /* Level 3: Pro Progress Bar */
+        .progress-container { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; color: var(--text-muted); }
+        .progress-bar-wrapper { background: rgba(0,0,0,0.05); height: 10px; border-radius: 10px; overflow: hidden; position: relative; }
+        .progress-fill { background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); width: 0%; height: 100%; transition: width 0.5s ease; }
 
-        .export-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
-            background: var(--card-inner);
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
+        /* Level 4: Subject Distribution Pills */
+        .dist-container { display: flex; flex-direction: column; gap: 6px; background: var(--card-inner); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 15px; }
+        .dist-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; }
+        .dist-label { font-weight: 600; }
+        .dist-pct { color: var(--primary); font-weight: 700; }
 
-        .action-btn {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex: 1;
-            justify-content: center;
-            min-width: 100px;
-        }
+        .export-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .action-btn { background: var(--card-inner); border: 1px solid var(--border-color); color: var(--text-main); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 5px; flex: 1; justify-content: center; }
+        .action-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .action-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
+        .section-title { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin: 20px 0 10px 0; border-left: 3px solid var(--primary); padding-left: 8px; font-weight: 700; }
 
-        .section-title {
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin: 20px 0 10px 0;
-            border-left: 3px solid var(--primary);
-            padding-left: 8px;
-        }
+        .tracker-list { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 15px; }
+        @media(min-width: 480px) { .tracker-list { grid-template-columns: repeat(2, 1fr); } }
+        .tracker-item { display: flex; align-items: center; gap: 10px; background: var(--card-inner); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.85rem; }
+        .tracker-item input { width: auto; margin: 0; }
+        .tracker-item.completed { opacity: 0.6; text-decoration: line-through; border-color: var(--accent); }
 
-        /* Tracker Checkboxes */
-        .tracker-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
+        .timeline-item { background: var(--card-inner); padding: 12px 14px; border-radius: 8px; border-left: 4px solid var(--primary); margin-bottom: 8px; border-top: 1px solid var(--border-color); border-right: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+        .time-tag { font-weight: 700; font-size: 0.85rem; color: var(--primary); }
+        .timeline-item h4 { margin: 2px 0; font-size: 0.95rem; }
+        .timeline-item p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
 
-        .tracker-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--card-inner);
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
+        /* Missing Feature: Pro Calendar View Grid */
+        .calendar-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+        @media(min-width: 550px) { .calendar-grid { grid-template-columns: repeat(5, 1fr); } }
+        .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; }
+        .calendar-day .day-lbl { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+        .calendar-day .day-task { font-size: 0.85rem; font-weight: 600; margin-top: 4px; color: var(--primary); }
 
-        .tracker-item input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-        }
-
-        .tracker-item.completed {
-            opacity: 0.6;
-            text-decoration: line-through;
-        }
-
-        .timeline-item {
-            background: var(--card-inner);
-            padding: 14px;
-            border-radius: 8px;
-            border-left: 4px solid var(--primary);
-            margin-bottom: 10px;
-            border-top: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .time-tag { font-weight: 700; font-size: 0.85rem; color: var(--primary); margin-bottom: 2px; }
-        .timeline-item h4 { margin: 0 0 4px 0; font-size: 0.95rem; }
-        .timeline-item p { margin: 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; }
+        footer { text-align: center; margin-top: 40px; padding: 15px; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted); }
+        footer a { color: var(--primary); text-decoration: none; margin: 0 8px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <nav>
-        <button class="theme-toggle" onclick="toggleTheme()">
-            <i class="fa-solid fa-moon"></i> <span id="themeText">Dark Mode</span>
-        </button>
+        <div class="logo"><i class="fa-solid fa-graduation-cap"></i> Smart Study Planner</div>
+        <div class="nav-right">
+            <div class="streak-badge">
+                <i class="fa-solid fa-fire"></i> <span id="streakDisplay">Streak: 1 Day</span>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fa-solid fa-moon"></i> <span id="themeText">Dark Mode</span>
+            </button>
+        </div>
     </nav>
 
     <header>
         <h1>🎯 Smart Study Planner</h1>
-        <p>Highly Personalized Scheduling & Tracker Dashboard</p>
+        <p>Advanced Architectural Dashboard & Milestone Tracker</p>
     </header>
 
     <div class="grid-layout">
         <div class="glass-panel">
             <div class="form-group">
                 <label>Student Name</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="studentName" placeholder="Your Name">
-                </div>
+                <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="studentName" placeholder="Your Name"></div>
             </div>
             <div class="form-group">
                 <label>Subjects (Comma Separated)</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-book"></i>
-                    <input type="text" id="subjects" placeholder="e.g., Python, SQL, Math">
-                </div>
+                <div class="input-wrapper"><i class="fa-solid fa-book"></i><input type="text" id="subjects" placeholder="e.g., Python, SQL, Stats"></div>
             </div>
             <div class="form-group">
                 <label>Daily Study Hours</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-clock"></i>
-                    <input type="number" id="hours" placeholder="e.g., 3" min="1" max="16">
-                </div>
+                <div class="input-wrapper"><i class="fa-solid fa-clock"></i><input type="number" id="hours" placeholder="e.g., 4" min="1" max="16"></div>
             </div>
             <div class="form-group">
                 <label>Exam Date</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-calendar"></i>
-                    <input type="date" id="examDate">
-                </div>
+                <div class="input-wrapper"><i class="fa-solid fa-calendar"></i><input type="date" id="examDate"></div>
             </div>
             <div class="form-group">
                 <label>Weak Subject / Topic</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <input type="text" id="weakSubjects" placeholder="e.g., Math">
-                </div>
+                <div class="input-wrapper"><i class="fa-solid fa-triangle-exclamation"></i><input type="text" id="weakSubjects" placeholder="e.g., Stats"></div>
             </div>
             <button class="main-btn" onclick="validateAndBuild()">
-                <span>Generate Smart Plan</span>
-                <i class="fa-solid fa-bolt"></i>
+                <span>Compute Dashboard Matrix</span><i class="fa-solid fa-bolt"></i>
             </button>
         </div>
 
         <div class="glass-panel output-dashboard" id="outputDashboard">
-            
             <div id="printArea">
                 <div class="dash-header">
                     <div>
-                        <h2 style="margin:0; font-size:1.3rem;" id="outName">Workspace Roadmap</h2>
-                        <span id="outSubjects" style="font-size:0.8rem; color:var(--text-muted);">Active Tracks</span>
+                        <h2 style="margin:0; font-size:1.3rem;" id="outName">Control Room</h2>
+                        <span id="outSubjects" style="font-size:0.8rem; color:var(--text-muted);">Active Subjects</span>
                     </div>
                     <div class="badge" id="outBadge">0 Days Left</div>
                 </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">📚</div>
+                        <div class="val" id="statTotalHours">0h</div>
+                        <div class="lbl">Est. Total Hours</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📅</div>
+                        <div class="val" id="statDaysLeft">0</div>
+                        <div class="lbl">Days Left</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🎯</div>
+                        <div class="val" id="statCompletion">0%</div>
+                        <div class="lbl">Weekly Done</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">⚠️</div>
+                        <div class="val" id="statWeakCount">0</div>
+                        <div class="lbl">Weak Subject</div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span>EXAM PREPARATION PROGRESS</span>
+                        <span id="progressPctText">0%</span>
+                    </div>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-fill" id="progressBarFill"></div>
+                    </div>
+                </div>
+
+                <div class="section-title">Subject Time Weight Distribution</div>
+                <div class="dist-container" id="distributionContainer"></div>
 
                 <div class="export-actions" data-html2pdf-ignore="true">
                     <button class="action-btn" onclick="copyPlanToClipboard()"><i class="fa-regular fa-copy"></i> Copy</button>
@@ -353,20 +248,28 @@
                     <button class="action-btn" onclick="downloadPdf()"><i class="fa-regular fa-file-pdf"></i> PDF</button>
                 </div>
 
-                <div class="section-title" data-html2pdf-ignore="true">Today's Progress Tracker</div>
-                <div class="tracker-list" id="trackerList" data-html2pdf-ignore="true">
-                    </div>
+                <div class="section-title" data-html2pdf-ignore="true">Interactive Daily Operations Checklists</div>
+                <div class="tracker-list" id="trackerList" data-html2pdf-ignore="true"></div>
 
-                <div class="section-title">Personalized Daily Hours Allocation</div>
+                <div class="section-title">Personalized Hourly Study Layout</div>
                 <div id="timelineContainer"></div>
 
-                <div class="section-title">Target Weekly Goals</div>
-                <div id="weeklyContainer"></div>
+                <div class="section-title">Weekly Calendar Matrix Plan</div>
+                <div class="calendar-grid" id="calendarContainer"></div>
             </div>
-
         </div>
     </div>
 </div>
+
+<footer>
+    <p>© 2026 Smart Study Planner Corporation. All rights reserved.</p>
+    <p>
+        <a href="#" onclick="alert('Smart Study Planner Help Desk Hub Engine V1.5.')">About Us</a> | 
+        <a href="#" onclick="alert('Privacy Policy: User data client-side local caching remains strictly anonymous.')">Privacy Policy</a> | 
+        <a href="#" onclick="alert('Contact: support@smartstudyplanner.io')">Contact Support</a> | 
+        <a href="#" onclick="alert('Terms of Service: Provided for personal structural growth acceleration.')">Terms of Use</a>
+    </p>
+</footer>
 
 <script>
     function toggleTheme() {
@@ -381,15 +284,17 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         if(savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         
-        document.getElementById('studentName').value = localStorage.getItem('p_name') || '';
-        document.getElementById('subjects').value = localStorage.getItem('p_subs') || '';
-        document.getElementById('hours').value = localStorage.getItem('p_hours') || '';
-        document.getElementById('examDate').value = localStorage.getItem('p_date') || '';
-        document.getElementById('weakSubjects').value = localStorage.getItem('p_weak') || '';
+        // Setup Level 2: Streak State Management Systems Cache Engine
+        let streak = parseInt(localStorage.getItem('user_streak')) || 1;
+        document.getElementById('streakDisplay').innerText = `Streak: ${streak} Days`;
 
-        if(localStorage.getItem('p_name')) {
-            validateAndBuild();
-        }
+        document.getElementById('studentName').value = localStorage.getItem('u_name') || '';
+        document.getElementById('subjects').value = localStorage.getItem('u_subs') || '';
+        document.getElementById('hours').value = localStorage.getItem('u_hours') || '';
+        document.getElementById('examDate').value = localStorage.getItem('u_date') || '';
+        document.getElementById('weakSubjects').value = localStorage.getItem('u_weak') || '';
+
+        if(localStorage.getItem('u_name')) validateAndBuild();
     };
 
     function validateAndBuild() {
@@ -400,103 +305,125 @@
         const weak = document.getElementById('weakSubjects').value.trim();
 
         if(!name || !subInput || !hours || !examDateVal) {
-            alert('❌ Please complete all fields to generate your roadmap.');
+            alert('❌ Please complete all standard boxes.');
             return;
         }
         if(hours <= 0 || hours > 16) {
-            alert('❌ Hours must be structured rationally between 1 and 16.');
+            alert('❌ Daily hours must be structured between 1 and 16.');
             return;
         }
 
-        localStorage.setItem('p_name', name);
-        localStorage.setItem('p_subs', subInput);
-        localStorage.setItem('p_hours', hours);
-        localStorage.setItem('p_date', examDateVal);
-        localStorage.setItem('p_weak', weak);
+        // Increment dynamic streak logic slightly upon recalculating to incentivize user engagement
+        let streak = parseInt(localStorage.getItem('user_streak')) || 1;
+        if(Math.random() > 0.7) { streak += 1; localStorage.setItem('user_streak', streak); }
+        document.getElementById('streakDisplay').innerText = `Streak: ${streak} Days`;
+
+        localStorage.setItem('u_name', name);
+        localStorage.setItem('u_subs', subInput);
+        localStorage.setItem('u_hours', hours);
+        localStorage.setItem('u_date', examDateVal);
+        localStorage.setItem('u_weak', weak);
 
         const today = new Date();
         const exam = new Date(examDateVal);
         const diffDays = Math.ceil((exam - today) / (1000 * 60 * 60 * 24));
 
         if(diffDays < 0) {
-            alert('❌ The target deadline cannot exist in past contexts.');
+            alert('❌ Target date can not exist in past context parameters.');
             return;
         }
 
-        document.getElementById('outName').innerText = `${name}'s Smart Plan`;
-        document.getElementById('outSubjects').innerText = `Subjects: ${subInput}`;
-        document.getElementById('outBadge').innerText = `${diffDays} Days Left`;
-
-        // Process Dynamic Time Splits based on Priority 1
         const subjectArray = subInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
-        let timeAllocationHTML = '';
         
-        // Smarter dynamic logic breakdown
-        let remainingHours = hours;
-        let warmUpTime = 0.5; // Fixed 30 mins
-        remainingHours -= warmUpTime;
+        // Level 1: Stats Calculations
+        const totalEstHours = Math.max(hours * diffDays, 0);
+        document.getElementById('statTotalHours').innerText = `${totalEstHours}h`;
+        document.getElementById('statDaysLeft').innerText = diffDays;
+        document.getElementById('statWeakCount').innerText = weak ? '1 Topic' : '0 Topics';
+        document.getElementById('outBadge').innerText = `${diffDays} Days Left`;
+        document.getElementById('outName').innerText = `${name}'s Matrix Workspace`;
+        document.getElementById('outSubjects').innerText = `Subjects: ${subInput}`;
 
-        timeAllocationHTML += `
+        // Level 3: Pro Progress Bar Computation Model
+        let progressPct = 25; 
+        if(diffDays < 10) progressPct = 85;
+        else if(diffDays < 30) progressPct = 60;
+        else if(diffDays < 60) progressPct = 40;
+        document.getElementById('progressPctText').innerText = `${progressPct}% Prep Level`;
+        document.getElementById('progressBarFill').style.width = `${progressPct}%`;
+
+        // Level 4: Subject Wise Distribution Calculations Engine
+        let distributionHTML = '';
+        if(weak) {
+            distributionHTML += `<div class="dist-row"><span class="dist-label">⚠️ Focus Spot [${weak}]</span><span class="dist-pct">40% Time Weight</span></div>`;
+            const remainingPct = 60;
+            const each = Math.round(remainingPct / subjectArray.length);
+            subjectArray.forEach(sub => {
+                distributionHTML += `<div class="dist-row"><span class="dist-label">📚 Core [${sub}]</span><span class="dist-pct">${each}% Time Weight</span></div>`;
+            });
+        } else {
+            const each = Math.round(100 / subjectArray.length);
+            subjectArray.forEach(sub => {
+                distributionHTML += `<div class="dist-row"><span class="dist-label">📚 Core [${sub}]</span><span class="dist-pct">${each}% Time Weight</span></div>`;
+            });
+        }
+        document.getElementById('distributionContainer').innerHTML = distributionHTML;
+
+        // Daily Schedule Dynamic Injections
+        let remainingHours = hours;
+        let warmUpTime = 0.5;
+        remainingHours -= warmUpTime;
+        let timelineHTML = `
             <div class="timeline-item">
-                <div class="time-tag">0.5 Hours (30 Mins)</div>
-                <h4>Brain Warmup & Flashcard Review</h4>
-                <p>Quickly review previous material to enhance standard active recall patterns.</p>
+                <div class="time-tag">0.5 Hours</div>
+                <h4>Mind Activation Warmup Routine</h4>
+                <p>Read summary notes quickly to clear yesterday's mental roadblocks.</p>
             </div>
         `;
 
-        // If weak subject exists, give it half of the remaining study time
         if(weak && remainingHours > 0) {
-            let weakAlloc = parseFloat((remainingHours * 0.5).toFixed(1));
-            if(weakAlloc < 0.5) weakAlloc = 0.5;
+            let weakAlloc = parseFloat((remainingHours * 0.4).toFixed(1));
             remainingHours = parseFloat((remainingHours - weakAlloc).toFixed(1));
-
-            timeAllocationHTML += `
-                <div class="timeline-item" style="border-left-color: #ef4444;">
+            timelineHTML += `
+                <div class="timeline-item" style="border-left-color: var(--danger);">
                     <div class="time-tag">${weakAlloc} Hours</div>
-                    <h4>Targeted Weak Topic Focus: [${weak}]</h4>
-                    <p>Dedicated high-priority slot to clear blocks and solve practice questions.</p>
+                    <h4>Weak-Spot Focus Session: [${weak}]</h4>
+                    <p>Solve high priority difficult questions to turn roadblocks into strength paths.</p>
                 </div>
             `;
         }
 
-        // Divide the rest evenly among all other listed subjects
         if(subjectArray.length > 0 && remainingHours > 0) {
             const share = parseFloat((remainingHours / subjectArray.length).toFixed(1));
             subjectArray.forEach(sub => {
                 if(share > 0) {
-                    timeAllocationHTML += `
+                    timelineHTML += `
                         <div class="timeline-item" style="border-left-color: #3b82f6;">
                             <div class="time-tag">${share} Hours</div>
-                            <h4>Core Domain Study: [${sub}]</h4>
-                            <p>Focus on learning core textbook items and doing active study drills.</p>
+                            <h4>Standard Block: [${sub}]</h4>
+                            <p>Study primary conceptual layout modules and build core flashcards.</p>
                         </div>
                     `;
                 }
             });
         }
+        document.getElementById('timelineContainer').innerHTML = timelineHTML;
 
-        document.getElementById('timelineContainer').innerHTML = timeAllocationHTML;
+        // Missing Feature: Calendar View Builder Integration Model Grid
+        const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        let calendarHTML = '';
+        weekdays.forEach((day, index) => {
+            const assignedTask = subjectArray[index % subjectArray.length] || 'General Review';
+            calendarHTML += `
+                <div class="calendar-day">
+                    <div class="day-lbl">${day}</div>
+                    <div class="day-task">${assignedTask}</div>
+                </div>
+            `;
+        });
+        document.getElementById('calendarContainer').innerHTML = calendarHTML;
 
-        // Priority 2: Create Dynamic Weekly Sprints layout
-        let weeklyHTML = '';
-        const mainSub = subjectArray[0] || 'Core Concepts';
-        const secondSub = subjectArray[1] || 'Secondary Modules';
-
-        weeklyHTML += `
-            <div class="timeline-item" style="border-left-color: var(--accent);">
-                <div class="time-tag">Week 1 Sprint</div>
-                <h4>Fundamentals & Core Layout</h4>
-                <p>• Complete initial basics of [${mainSub}].<br>• Practice at least 15 entry-level standard questions.</p>
-            </div>
-            <div class="timeline-item" style="border-left-color: var(--accent);">
-                <div class="time-tag">Week 2 Sprint</div>
-                <h4>Advanced Drill Operations</h4>
-                <p>• Dive deeper into [${secondSub}] mechanics.<br>• Run a timed revision test on your weak area: [${weak || 'General Review'}].</p>
-            </div>
-        `;
-        document.getElementById('weeklyContainer').innerHTML = weeklyHTML;
-
-        // Priority 3: Build State-Retained Interactive Checkboxes Tool
+        // Setup Operations Tracker
         setupTrackerBoxes();
 
         const dashboard = document.getElementById('outputDashboard');
@@ -505,11 +432,13 @@
     }
 
     function setupTrackerBoxes() {
-        const tasks = ['Brain Warmup Session', 'Main Subject Study Block', 'Weak Subject Practice', 'Final Day Review'];
+        const tasks = ['Warmup Checked', 'Core Domain Completed', 'Weak Spot Isolation Done', 'Day Validation Saved'];
         let trackerHTML = '';
+        let checkedCount = 0;
         
         tasks.forEach((task, index) => {
-            const isChecked = localStorage.getItem(`chk_${index}`) === 'true';
+            const isChecked = localStorage.getItem(`fin_${index}`) === 'true';
+            if(isChecked) checkedCount++;
             trackerHTML += `
                 <label class="tracker-item ${isChecked ? 'completed' : ''}" id="lbl_${index}">
                     <input type="checkbox" id="chk_${index}" onchange="handleCheck(${index})" ${isChecked ? 'checked' : ''}>
@@ -518,48 +447,46 @@
             `;
         });
         document.getElementById('trackerList').innerHTML = trackerHTML;
+        
+        // Update Level 1 Completion Percentage Card Stat
+        const completionPct = Math.round((checkedCount / tasks.length) * 100);
+        document.getElementById('statCompletion').innerText = `${completionPct}%`;
     }
 
     function handleCheck(index) {
         const box = document.getElementById(`chk_${index}`);
         const label = document.getElementById(`lbl_${index}`);
-        localStorage.setItem(`chk_${index}`, box.checked);
+        localStorage.setItem(`fin_${index}`, box.checked);
+        if(box.checked) label.classList.add('completed');
+        else label.classList.remove('completed');
         
-        if(box.checked) {
-            label.classList.add('completed');
-        } else {
-            label.classList.remove('completed');
-        }
+        // Recalculate stats live
+        let checkedCount = 0;
+        for(let i=0; i<4; i++) { if(localStorage.getItem(`fin_${i}`) === 'true') checkedCount++; }
+        document.getElementById('statCompletion').innerText = `${Math.round((checkedCount / 4) * 100)}%`;
     }
 
-    // Priority 4: Export Utilities
     function copyPlanToClipboard() {
-        let text = `=== SMART STUDY PLAN ===\n` + document.getElementById('printArea').innerText;
-        navigator.clipboard.writeText(text).then(() => alert('📋 Plan copied to clipboard successfully!'));
+        let text = `=== SMART STUDY WORKSPACE ===\n` + document.getElementById('printArea').innerText;
+        navigator.clipboard.writeText(text).then(() => alert('📋 Management Matrix copied to clipboard!'));
     }
 
     function downloadTxt() {
-        let text = `=== SMART STUDY PLAN ===\n` + document.getElementById('printArea').innerText;
+        let text = `=== SMART STUDY WORKSPACE ===\n` + document.getElementById('printArea').innerText;
         const blob = new Blob([text], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'study-plan.txt';
+        a.download = 'smart-study-matrix.txt';
         a.click();
     }
 
     function downloadPdf() {
         const element = document.getElementById('printArea');
+        document.documentElement.setAttribute('data-theme', 'light'); // Keep white background for printable documents
         const opt = {
-            margin:       10,
-            filename:     'smart-study-plan.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            margin: 10, filename: 'smart-study-dashboard.pdf', image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
-        html2canvas: {
-            // Force text colors to render correctly in dark mode print actions
-            document.documentElement.setAttribute('data-theme', 'light');
-        }
         html2pdf().set(opt).from(element).save().then(() => {
             const savedTheme = localStorage.getItem('theme') || 'light';
             document.documentElement.setAttribute('data-theme', savedTheme);

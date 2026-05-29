@@ -45,7 +45,6 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        /* Fix #1: Increased Desktop max-width for wider and professional look */
         .container { max-width: 1400px; margin: 0 auto; }
         nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .logo { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 6px; color: var(--primary); }
@@ -55,13 +54,12 @@
             background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main);
             padding: 6px 12px; border-radius: 30px; font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 0.8rem;
         }
-        .streak-badge { border-color: #f97316; color: #f97316; }
+        .streak-badge { border-color: #f97316; color: #f97316; cursor: pointer; }
 
         header { text-align: center; margin-bottom: 20px; }
         header h1 { font-size: 1.8rem; font-weight: 800; margin: 0 0 4px 0; }
         header p { margin: 0; color: var(--text-muted); font-size: 0.85rem; }
 
-        /* Fix #1: Wider Dashboard Layout Split proportion */
         .grid-layout { display: grid; grid-template-columns: 1fr; gap: 15px; }
         @media (min-width: 768px) { body { padding: 25px; } .grid-layout { grid-template-columns: 340px 1.4fr; gap: 25px; } header h1 { font-size: 2.2rem; } }
 
@@ -90,12 +88,20 @@
         button.main-btn {
             width: 100%; background: var(--primary); color: white; padding: 12px; border: none; border-radius: 8px;
             font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px;
+            position: relative; overflow: hidden;
         }
+        button.main-btn:disabled { opacity: 0.8; cursor: not-allowed; }
         button.secondary-btn {
             width: 100%; background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 10px;
             border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: none; text-align: center;
         }
         button.secondary-btn:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
+
+        .loader-spinner {
+            display: none; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%; border-top-color: white; animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; opacity: 0.7; }
@@ -106,12 +112,16 @@
 
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
         @media (min-width: 480px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
-        .stat-card { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center; }
+        
+        .stat-card { 
+            background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; 
+            border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.2s ease;
+        }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 5px 12px rgba(0,0,0,0.08); border-color: var(--primary); }
         .stat-card .icon { font-size: 1.2rem; margin-bottom: 2px; }
         .stat-card .val { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
         .stat-card .lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
-        /* Fix #2: First Task Card Upgraded with Stronger Visual Power and Structured Elements */
         .action-now-card { 
             background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 16px; border-radius: 12px; margin-bottom: 15px; 
             box-shadow: 0 4px 15px rgba(217, 119, 6, 0.25); border: 1px solid rgba(255,255,255,0.1);
@@ -121,24 +131,19 @@
         .action-now-card .task-title { font-size: 1.35rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
         .action-now-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0, 0, 0, 0.15); padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; }
         .action-meta-item { display: flex; flex-direction: column; }
-        .action-meta-item span.label { font-size: 0.65rem; uppercase; opacity: 0.8; font-weight: 600; margin-bottom: 2px; }
+        .action-meta-item span.label { font-size: 0.65rem; text-transform: uppercase; opacity: 0.8; font-weight: 600; margin-bottom: 2px; }
         .action-meta-item span.value { font-weight: 700; }
 
         .insights-container { background: var(--card-inner); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 15px; font-size: 0.85rem; }
         .insight-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; padding: 6px; border-radius: 6px; }
         .insight-item:last-child { margin-bottom: 0; }
         
-        /* Fix #4: Weak Area Urgent Highlight Card Block Styling */
-        .insight-item.weak-highlight {
-            background: rgba(239, 68, 68, 0.06);
-            border-left: 4px solid var(--danger);
-        }
+        .insight-item.weak-highlight { background: rgba(239, 68, 68, 0.06); border-left: 4px solid var(--danger); }
 
         .progress-container { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 15px; }
         .progress-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: var(--text-muted); }
         .progress-bar-wrapper { background: rgba(0,0,0,0.05); height: 8px; border-radius: 10px; overflow: hidden; }
         .progress-fill { background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); width: 0%; height: 100%; transition: width 0.4s ease; }
-        /* Fix #5: Task Count text underneath the primary progress metric container */
         .progress-footer-count { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-top: 5px; text-align: left; }
 
         .export-actions { display: flex; gap: 6px; margin-bottom: 15px; width: 100%; }
@@ -160,17 +165,28 @@
 
         .calendar-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 6px; margin-top: 8px; }
         @media(min-width: 550px) { .calendar-grid { grid-template-columns: repeat(5, 1fr); } }
-        /* Fix #3: Uniform height logic for weekly grid cards alignment */
         .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 95px; box-sizing: border-box; }
         .calendar-day .day-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
         .calendar-day .day-task { font-size: 0.8rem; font-weight: 700; margin-top: 4px; color: var(--primary); }
         .calendar-day .day-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; line-height: 1.2; }
 
-        /* Missing Feature UI: Past Performance Historical Log Grid Component */
+        /* Fix #1: Dynamic 0% Start Visual History Component */
         .history-log-wrapper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-        .history-node { background: var(--card-inner); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; text-align: center; font-size: 0.75rem; }
-        .history-node .h-day { font-weight: 700; color: var(--text-muted); margin-bottom: 2px; }
-        .history-node .h-pct { font-weight: 800; color: var(--accent); font-size: 0.9rem; }
+        .history-node { background: var(--card-inner); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 8px; text-align: center; font-size: 0.75rem; }
+        .history-node .h-day { font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+        .history-node .h-pct { font-weight: 800; color: var(--accent); font-size: 0.95rem; margin-bottom: 5px; }
+        .mini-bar-bg { background: rgba(0,0,0,0.05); height: 5px; border-radius: 4px; overflow: hidden; width: 80%; margin: 0 auto; }
+        .mini-bar-fill { background: var(--accent); height: 100%; width: 0%; transition: width 0.4s ease; }
+
+        .toast-notification {
+            position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%);
+            background: #0f172a; color: #f8fafc; padding: 10px 20px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: bottom 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 9999; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .toast-notification.show { bottom: 30px; }
+        .toast-notification i { color: var(--accent); }
 
         footer { text-align: center; margin-top: 40px; padding: 15px; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted); }
     </style>
@@ -181,7 +197,7 @@
     <nav>
         <div class="logo"><i class="fa-solid fa-graduation-cap"></i> AI Horizon Study Coach</div>
         <div class="nav-right">
-            <div class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="streakDisplay">Streak: 0 Days</span></div>
+            <div class="streak-badge" onclick="scrollToSection('outputDashboard')"><i class="fa-solid fa-fire"></i> <span id="streakDisplay">Streak: 0 Days</span></div>
             <button class="theme-toggle" onclick="toggleTheme()">
                 <i class="fa-solid fa-moon"></i> <span id="themeText">Dark Mode</span>
             </button>
@@ -202,7 +218,7 @@
             </div>
             <div class="form-group">
                 <label>What do you want to learn?</label>
-                <div class="input-wrapper"><i class="fa-solid fa-book"></i><input type="text" id="subjects" placeholder="e.g., Python, UI Design, Marketing"></div>
+                <div class="input-wrapper"><i class="fa-solid fa-book"></i><input type="text" id="subjects" placeholder="e.g., Python, Java, SQL or UI, UX"></div>
                 <div class="error-msg" id="err_subjects">Please specify at least one topic</div>
             </div>
             <div class="form-group">
@@ -232,8 +248,10 @@
             </div>
             
             <div class="btn-group">
-                <button class="main-btn" onclick="validateAndBuild()">
-                    <span>Generate Study Plan</span><i class="fa-solid fa-bolt"></i>
+                <button class="main-btn" id="generateBtn" onclick="triggerPlanGeneration()">
+                    <span id="btnText">Generate Study Plan</span>
+                    <i class="fa-solid fa-bolt" id="btnIcon"></i>
+                    <div class="loader-spinner" id="btnLoader"></div>
                 </button>
                 <button class="secondary-btn" id="resetBtn" onclick="resetPlanFlow()">Reset Workspace</button>
             </div>
@@ -278,24 +296,24 @@
                 </div>
 
                 <div class="stats-grid">
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="scrollToSection('historyLogSection')">
                         <div class="icon">🔥</div>
                         <div class="val" id="statStreak">0 Days</div>
                         <div class="lbl">Study Streak</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="scrollToSection('timelineContainer')">
                         <div class="icon">⏳</div>
                         <div class="val" id="statTotalHours">0h</div>
                         <div class="lbl">Total Hours</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="scrollToSection('trackerList')">
                         <div class="icon">📊</div>
                         <div class="val" id="statCompletion">0%</div>
                         <div class="lbl">Today's Progress</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="scrollToSection('calendarContainer')">
                         <div class="icon">📈</div>
-                        <div class="val" id="statWeeklyLog">0 / 7 Days</div>
+                        <div class="val" id="statWeeklyLog">0 / 5 Days</div>
                         <div class="lbl">Weekly Goals</div>
                     </div>
                 </div>
@@ -311,11 +329,23 @@
                     <div class="progress-footer-count" id="progressCountText">0 / 4 Tasks Completed</div>
                 </div>
 
-                <div class="section-title">Past Performance History</div>
+                <div class="section-title" id="historyLogSection">Past Performance History</div>
                 <div class="history-log-wrapper">
-                    <div class="history-node"><div class="h-day">Yesterday</div><div class="h-pct" id="histYest">0%</div></div>
-                    <div class="history-node"><div class="h-day">2 Days Ago</div><div class="h-pct" id="hist2Days">0%</div></div>
-                    <div class="history-node"><div class="h-day">3 Days Ago</div><div class="h-pct" id="hist3Days">0%</div></div>
+                    <div class="history-node">
+                        <div class="h-day">Yesterday</div>
+                        <div class="h-pct" id="histYest">0%</div>
+                        <div class="mini-bar-bg"><div class="mini-bar-fill" id="histBarYest"></div></div>
+                    </div>
+                    <div class="history-node">
+                        <div class="h-day">2 Days Ago</div>
+                        <div class="h-pct" id="hist2Days">0%</div>
+                        <div class="mini-bar-bg"><div class="mini-bar-fill" id="histBar2Days"></div></div>
+                    </div>
+                    <div class="history-node">
+                        <div class="h-day">3 Days Ago</div>
+                        <div class="h-pct" id="hist3Days">0%</div>
+                        <div class="mini-bar-bg"><div class="mini-bar-fill" id="histBar3Days"></div></div>
+                    </div>
                 </div>
 
                 <div class="section-title">Strategic Insights</div>
@@ -327,7 +357,7 @@
                     <button class="action-btn" onclick="downloadPdf()"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
                 </div>
 
-                <div class="section-title" data-html2pdf-ignore="true">Today's Checklists</div>
+                <div class="section-title" id="checklistTitle" data-html2pdf-ignore="true">Today's Checklists</div>
                 <div class="tracker-list" id="trackerList" data-html2pdf-ignore="true"></div>
 
                 <div class="section-title">Daily Time Allocation</div>
@@ -340,17 +370,76 @@
     </div>
 </div>
 
+<div class="toast-notification" id="toastBox">
+    <i class="fa-solid fa-circle-check"></i>
+    <span id="toastMessage">Plan copied successfully!</span>
+</div>
+
 <footer>
     <p>Built by <strong>Venkat</strong> | Version 1.0</p>
 </footer>
 
 <script>
+    // List of keys this app uses (To prevent safe reset vulnerabilities)
+    const APP_STORAGE_KEYS = [
+        'h_name', 'h_subs', 'h_hours', 'h_months', 'h_pace', 'h_weak',
+        'real_streak_val', 'last_completed_date', 'theme',
+        'real_hist_yest', 'real_hist_2d', 'real_hist_3d',
+        'h_m_v4_0', 'h_m_v4_1', 'h_m_v4_2', 'h_m_v4_3', 'completed_days_count'
+    ];
+
     function toggleTheme() {
         const current = document.documentElement.getAttribute('data-theme');
         const target = current === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', target);
         localStorage.setItem('theme', target);
         document.getElementById('themeText').innerText = target === 'dark' ? 'Light Mode' : 'Dark Mode';
+    }
+
+    function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if(el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toastBox');
+        document.getElementById('toastMessage').innerText = msg;
+        toast.classList.add('show');
+        setTimeout(() => { toast.classList.remove('show'); }, 2500);
+    }
+
+    function triggerPlanGeneration() {
+        clearInlineErrors();
+        
+        const name = document.getElementById('studentName').value.trim();
+        const subInput = document.getElementById('subjects').value.trim();
+        const hours = parseFloat(document.getElementById('hours').value);
+        const months = parseInt(document.getElementById('timelineMonths').value);
+
+        if(!name || !subInput || isNaN(hours) || hours <= 0 || hours > 16 || isNaN(months) || months <= 0 || months > 24) {
+            validateAndBuild();
+            return;
+        }
+
+        const btnText = document.getElementById('btnText');
+        const btnIcon = document.getElementById('btnIcon');
+        const btnLoader = document.getElementById('btnLoader');
+        const mainBtn = document.getElementById('generateBtn');
+
+        btnText.innerText = "Generating your study roadmap...";
+        btnIcon.style.display = "none";
+        btnLoader.style.display = "inline-block";
+        mainBtn.disabled = true;
+
+        setTimeout(() => {
+            btnText.innerText = "Generate Study Plan";
+            btnIcon.style.display = "inline-block";
+            btnLoader.style.display = "none";
+            mainBtn.disabled = false;
+            
+            validateAndBuild();
+            showToast("✨ Roadmap generated successfully!");
+        }, 1500);
     }
 
     window.onload = function() {
@@ -363,10 +452,7 @@
         let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
         document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
 
-        // Render mockup mock past data for frontend value depth representation
-        document.getElementById('histYest').innerText = localStorage.getItem('hist_yest') || '75%';
-        document.getElementById('hist2Days').innerText = localStorage.getItem('hist_2d') || '100%';
-        document.getElementById('hist3Days').innerText = localStorage.getItem('hist_3d') || '50%';
+        renderPastHistoryMetrics();
 
         document.getElementById('studentName').value = localStorage.getItem('h_name') || '';
         document.getElementById('subjects').value = localStorage.getItem('h_subs') || '';
@@ -380,6 +466,22 @@
             document.getElementById('resetBtn').style.display = 'block';
         }
     };
+
+    // Fix #1: Real History Logic with fallback to 0% for brand new profiles
+    function renderPastHistoryMetrics() {
+        const yestVal = localStorage.getItem('real_hist_yest') || '0%';
+        const day2Val = localStorage.getItem('real_hist_2d') || '0%';
+        const day3Val = localStorage.getItem('real_hist_3d') || '0%';
+
+        document.getElementById('histYest').innerText = yestVal;
+        document.getElementById('histBarYest').style.width = yestVal;
+
+        document.getElementById('hist2Days').innerText = day2Val;
+        document.getElementById('histBar2Days').style.width = day2Val;
+
+        document.getElementById('hist3Days').innerText = day3Val;
+        document.getElementById('histBar3Days').style.width = day3Val;
+    }
 
     function clearInlineErrors() {
         const fields = ['studentName', 'subjects', 'hours', 'timelineMonths'];
@@ -418,31 +520,38 @@
         document.getElementById('resetBtn').style.display = 'block';
         document.getElementById('emptyStatePanel').style.display = 'none';
 
-        const subjectArray = subInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
-        const primeSubject = subjectArray[0];
+        // Fix #5: Intelligent split handling commas or pure spaces organically
+        let subjectArray = [];
+        if(subInput.includes(',')) {
+            subjectArray = subInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        } else {
+            subjectArray = subInput.split(/\s+/).map(s => s.trim()).filter(s => s.length > 0);
+        }
+
+        const primeSubject = subjectArray[0] || "Core Track";
         const totalEstDays = months * 30;
         const totalEstHours = Math.max(hours * totalEstDays, 0);
         
         let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
+        let completedDays = parseInt(localStorage.getItem('completed_days_count')) || 0;
+
         document.getElementById('statTotalHours').innerText = `${totalEstHours}h`;
         document.getElementById('statStreak').innerText = `${currentStreak} Days`;
+        
+        // Fix #2: Fully Computed dynamic weekly goal metrics tracking engine
+        document.getElementById('statWeeklyLog').innerText = `${completedDays} / 5 Days`;
+
         document.getElementById('outBadge').innerText = `${months} Month Track (${pace.toUpperCase()})`;
         document.getElementById('outName').innerText = `${name}'s Study Dashboard`;
-        document.getElementById('outSubjects').innerText = `Target Tracks: ${subInput}`;
+        document.getElementById('outSubjects').innerText = `Target Tracks: ${subjectArray.join(', ')}`;
 
-        // Fix #2 Upgrade data binders onto task card nodes safely
-        document.getElementById('actionTaskTitle').innerText = weak ? `Master ${weak}` : `Study ${primeSubject} Core Fundamentals`;
+        document.getElementById('actionTaskTitle').innerText = weak ? `Master ${weak}` : `Study ${primeSubject} Basics`;
         document.getElementById('actionTaskDuration').innerText = hours > 1 ? "45 Minutes" : "30 Minutes";
         document.getElementById('actionTaskGoal').innerText = weak ? "Fix Core Bottlenecks" : "Build Core Concepts";
 
-        // Setup Insights
-        let insightsHTML = `<div class="insight-item">🚀 <strong>Primary Goal:</strong> Focused on expanding your skills in [${subInput}].</div>`;
+        let insightsHTML = `<div class="insight-item">🚀 <strong>Primary Goal:</strong> Focused on expanding your skills in [${subjectArray.join(', ')}].</div>`;
         if(weak) {
-            // Fix #4 Applied high impact styling wrapper component explicitly
-            insightsHTML += `
-                <div class="insight-item weak-highlight">
-                    ⚠️ <strong>Focus Area Highlight:</strong> [${weak}] is marked as your weak spot. Ensure extra focus is given during daily study blocks.
-                </div>`;
+            insightsHTML += `<div class="insight-item weak-highlight">⚠️ <strong>Focus Area Highlight:</strong> [${weak}] is marked as your weak spot. Ensure extra focus is given during daily study blocks.</div>`;
         } else {
             insightsHTML += `<div class="insight-item">✅ <strong>Balanced Routine:</strong> Spreading study sessions evenly across all specified subjects.</div>`;
         }
@@ -469,7 +578,6 @@
         }
         document.getElementById('timelineContainer').innerHTML = timelineHTML;
 
-        // Dynamic Calendar fallback setup
         const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         let topicsFallbacks = ['Variables & Syntax', 'Functions & Loops', 'Core Architecture', 'Practical Exercises', 'Weekly Review Test'];
         
@@ -495,7 +603,6 @@
 
         const dash = document.getElementById('outputDashboard');
         dash.style.display = 'block';
-        dash.scrollIntoView({ behavior: 'smooth' });
     }
 
     function setupTrackerBoxes() {
@@ -504,7 +611,7 @@
         let tickedCount = 0;
         
         tasks.forEach((m, i) => {
-            const done = localStorage.getItem(`h_m_v3_${i}`) === 'true'; 
+            const done = localStorage.getItem(`h_m_v4_${i}`) === 'true'; 
             if(done) tickedCount++;
             trackerHTML += `
                 <label class="tracker-item ${done ? 'completed' : ''}" id="lbl_${i}">
@@ -515,46 +622,66 @@
         });
         document.getElementById('trackerList').innerHTML = trackerHTML;
         
-        const pct = Math.round((tickedCount / tasks.length) * 100);
         updateProgressUI(tickedCount, tasks.length);
     }
 
     function handleCheck(i) {
         const box = document.getElementById(`chk_${i}`);
         const label = document.getElementById(`lbl_${i}`);
-        localStorage.setItem(`h_m_v3_${i}`, box.checked);
+        localStorage.setItem(`h_m_v4_${i}`, box.checked);
         
         if(box.checked) label.classList.add('completed'); else label.classList.remove('completed');
         
         let tickedCount = 0; 
         for(let j=0; j<4; j++) { 
-            if(localStorage.getItem(`h_m_v3_${j}`) === 'true') tickedCount++; 
+            if(localStorage.getItem(`h_m_v4_${j}`) === 'true') tickedCount++; 
         }
         
         updateProgressUI(tickedCount, 4);
 
+        // Fix #3: Robust Streak Engine and Computed Counters
         if(tickedCount === 4) {
             const todayStr = new Date().toDateString();
             const lastStreakDate = localStorage.getItem('last_completed_date');
             
             if(lastStreakDate !== todayStr) {
                 let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
-                currentStreak += 1;
+                let completedDays = parseInt(localStorage.getItem('completed_days_count')) || 0;
+
+                // Authentic verification logic validation
+                if (lastStreakDate) {
+                    const yesterday = new Date();
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    if (new Date(lastStreakDate).toDateString() === yesterday.toDateString()) {
+                        currentStreak += 1; // broken gap detection safety rule checked
+                    } else {
+                        currentStreak = 1; // Reset streak if user skipped days
+                    }
+                } else {
+                    currentStreak = 1; // First day ever
+                }
+
+                completedDays = (completedDays % 5) + 1; // Loops clean 1-5 days bounds smoothly
+                
                 localStorage.setItem('real_streak_val', currentStreak);
+                localStorage.setItem('completed_days_count', completedDays);
                 localStorage.setItem('last_completed_date', todayStr);
                 
                 document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
                 document.getElementById('statStreak').innerText = `${currentStreak} Days`;
-                document.getElementById('statWeeklyLog').innerText = `1 / 7 Days`;
+                document.getElementById('statWeeklyLog').innerText = `${completedDays} / 5 Days`;
                 
-                // Keep history alive instantly
-                localStorage.setItem('hist_yest', '100%');
-                document.getElementById('histYest').innerText = '100%';
+                // Roll and save real historical states organically
+                localStorage.setItem('real_hist_3d', localStorage.getItem('real_hist_2d') || '0%');
+                localStorage.setItem('real_hist_2d', localStorage.getItem('real_hist_yest') || '0%');
+                localStorage.setItem('real_hist_yest', '100%');
+                
+                renderPastHistoryMetrics();
+                showToast("🔥 Streak extended! 100% completion recorded.");
             }
         }
     }
 
-    // Fix #5 Render dynamic explicit fraction text nodes inside progress layout update routine
     function updateProgressUI(ticked, total) {
         const pct = total > 0 ? Math.round((ticked / total) * 100) : 0;
         document.getElementById('statCompletion').innerText = `${pct}%`;
@@ -563,15 +690,13 @@
         document.getElementById('progressCountText').innerText = `${ticked} / ${total} Tasks Completed`;
     }
 
+    // Fix #4: Secure Reset targeting app keys explicitly without breaking external local storage properties
     function resetPlanFlow() {
-        let currentStreak = localStorage.getItem('real_streak_val') || 0;
-        let lastDate = localStorage.getItem('last_completed_date');
-        let theme = localStorage.getItem('theme') || 'light';
-        localStorage.clear();
-        
-        localStorage.setItem('real_streak_val', currentStreak);
-        if(lastDate) localStorage.setItem('last_completed_date', lastDate);
-        localStorage.setItem('theme', theme);
+        APP_STORAGE_KEYS.forEach(key => {
+            if(key !== 'theme' && key !== 'real_streak_val' && key !== 'last_completed_date' && !key.startsWith('real_hist_')) {
+                localStorage.removeItem(key);
+            }
+        });
 
         document.getElementById('studentName').value = '';
         document.getElementById('subjects').value = '';
@@ -590,7 +715,9 @@
 
     function copyPlanToClipboard() {
         let txt = `=== AI HORIZON COACH ROADMAP ===\n` + document.getElementById('printArea').innerText;
-        navigator.clipboard.writeText(txt).then(() => alert('📋 Plan copied to clipboard!'));
+        navigator.clipboard.writeText(txt).then(() => {
+            showToast("📋 Plan copied to clipboard successfully!");
+        });
     }
 
     function downloadTxt() {
@@ -598,6 +725,7 @@
         const b = new Blob([txt], { type: 'text/plain' });
         const url = URL.createObjectURL(b);
         const a = document.createElement('a'); a.href = url; a.download = 'study-plan.txt'; a.click();
+        showToast("📥 Text file download started!");
     }
 
     function downloadPdf() {
@@ -608,8 +736,10 @@
             margin: 10, filename: 'study-plan.pdf', image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
+        showToast("⚙️ Preparing PDF. Please wait...");
         html2pdf().set(options).from(element).save().then(() => {
             if(currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+            showToast("📄 PDF downloaded successfully!");
         });
     }
 </script>

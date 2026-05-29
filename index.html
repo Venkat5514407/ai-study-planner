@@ -1,437 +1,470 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Study Planner</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --panel-bg: rgba(255, 255, 255, 0.8);
+            --border-color: rgba(0, 0, 0, 0.08);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.15);
+            --accent: #10b981;
+            --card-inner: #ffffff;
+        }
 
-<title>AI Study Planner</title>
+        [data-theme="dark"] {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --panel-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.2);
+            --accent: #34d399;
+            --card-inner: rgba(0, 0, 0, 0.2);
+        }
 
-<style>
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-body{
-    background: linear-gradient(135deg,#dbeafe,#f5f3ff);
-    min-height:100vh;
-    padding:20px;
-    color:#1f2937;
-}
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
 
-.container{
-    max-width:1100px;
-    margin:auto;
-}
+        .theme-toggle {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: auto;
+        }
 
-header{
-    text-align:center;
-    margin-bottom:30px;
-}
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-header h1{
-    font-size:3rem;
-    color:#4338ca;
-    margin-bottom:10px;
-}
+        header h1 {
+            font-size: 2.3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
 
-header p{
-    color:#4b5563;
-    font-size:1.05rem;
-}
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
 
-.main{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:25px;
-}
+        @media (min-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 380px 1fr;
+            }
+        }
 
-.card{
-    background:rgba(255,255,255,0.75);
-    backdrop-filter:blur(12px);
-    border-radius:20px;
-    padding:25px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.08);
-}
+        .glass-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
 
-.card h2{
-    margin-bottom:20px;
-    color:#4338ca;
-}
+        .form-group {
+            margin-bottom: 18px;
+        }
 
-.form-group{
-    margin-bottom:18px;
-}
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
 
-label{
-    display:block;
-    margin-bottom:8px;
-    font-weight:600;
-}
+        .input-wrapper {
+            position: relative;
+        }
 
-input,
-textarea{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:#f9fafb;
-    font-size:15px;
-    outline:none;
-    border:1px solid #d1d5db;
-    transition:0.3s;
-}
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
 
-input:focus,
-textarea:focus{
-    border-color:#6366f1;
-    box-shadow:0 0 0 4px rgba(99,102,241,0.15);
-}
+        input {
+            width: 100%;
+            padding: 12px 12px 12px 42px;
+            background: var(--card-inner);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: all 0.2s;
+        }
 
-textarea{
-    resize:none;
-    height:90px;
-}
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
 
-button{
-    width:100%;
-    padding:15px;
-    border:none;
-    border-radius:14px;
-    background:#4f46e5;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.3s;
-}
+        button.main-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.1s, opacity 0.2s;
+        }
 
-button:hover{
-    background:#4338ca;
-    transform:translateY(-2px);
-}
+        button.main-btn:active { transform: scale(0.98); }
 
-.output{
-    display:none;
-}
+        .copy-btn {
+            background: var(--card-inner);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .copy-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
 
-.plan-box{
-    background:white;
-    padding:18px;
-    border-radius:14px;
-    margin-bottom:18px;
-    border-left:6px solid #4f46e5;
-}
+        /* Output View Dashboard */
+        .output-dashboard { display: none; }
 
-.plan-box h3{
-    margin-bottom:12px;
-    color:#4338ca;
-}
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
 
-.plan-box ul{
-    padding-left:20px;
-}
+        .badge {
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
 
-.plan-box li{
-    margin-bottom:10px;
-    line-height:1.5;
-}
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
 
-.subject-tags{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:10px;
-}
+        .metric-card {
+            background: var(--card-inner);
+            padding: 14px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
 
-.tag{
-    background:#e0e7ff;
-    color:#3730a3;
-    padding:8px 14px;
-    border-radius:30px;
-    font-size:14px;
-    font-weight:600;
-}
+        .metric-card .val { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+        .metric-card .lbl { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
 
-.countdown{
-    background:#ede9fe;
-    color:#5b21b6;
-    padding:12px;
-    border-radius:12px;
-    margin-top:15px;
-    text-align:center;
-    font-weight:bold;
-}
+        .timeline-item {
+            background: var(--card-inner);
+            padding: 16px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            margin-bottom: 12px;
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
 
-.loading{
-    text-align:center;
-    padding:20px;
-    display:none;
-}
-
-.loader{
-    width:45px;
-    height:45px;
-    border:5px solid #ddd;
-    border-top:5px solid #4f46e5;
-    border-radius:50%;
-    margin:auto;
-    animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-    100%{
-        transform:rotate(360deg);
-    }
-}
-
-@media(max-width:900px){
-
-    .main{
-        grid-template-columns:1fr;
-    }
-
-    header h1{
-        font-size:2.2rem;
-    }
-}
-
-</style>
+        .time-tag { font-weight: 700; font-size: 0.9rem; color: var(--primary); margin-bottom: 4px; }
+        .timeline-item h4 { margin: 0 0 4px 0; font-size: 1.05rem; }
+        .timeline-item p { margin: 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
-
-<header>
-    <h1>📚 AI Study Planner</h1>
-    <p>Create personalized AI-powered study schedules instantly</p>
-</header>
-
-<div class="main">
-
-    <!-- INPUT SECTION -->
-
-    <div class="card">
-
-        <h2>Student Details</h2>
-
-        <div class="form-group">
-            <label>Student Name</label>
-            <input type="text" id="name" placeholder="Enter your name">
-        </div>
-
-        <div class="form-group">
-            <label>Subjects</label>
-            <textarea id="subjects" placeholder="Math, Physics, Chemistry"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Daily Study Hours</label>
-            <input type="number" id="hours" placeholder="Example: 5">
-        </div>
-
-        <div class="form-group">
-            <label>Exam Date</label>
-            <input type="date" id="examDate">
-        </div>
-
-        <div class="form-group">
-            <label>Weak Subjects</label>
-            <textarea id="weakSubjects" placeholder="Physics, Organic Chemistry"></textarea>
-        </div>
-
-        <button onclick="generatePlan()">
-            Generate AI Study Plan ✨
+    <nav>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <i class="fa-solid fa-moon"></i> <span id="themeText">Dark Mode</span>
         </button>
+    </nav>
 
-    </div>
+    <header>
+        <h1>🎯 Smart Study Planner</h1>
+        <p>Your Personalized Daily Action Plan Generator</p>
+    </header>
 
-    <!-- OUTPUT SECTION -->
-
-    <div class="card">
-
-        <div class="loading" id="loading">
-            <div class="loader"></div>
-            <p style="margin-top:15px;">AI is generating your smart study plan...</p>
+    <div class="grid-layout">
+        <div class="glass-panel">
+            <div class="form-group">
+                <label>Student Name</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="studentName" placeholder="Enter your name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Subjects to Study</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-book"></i>
+                    <input type="text" id="subjects" placeholder="e.g., Python, Math">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Daily Study Hours</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-clock"></i>
+                    <input type="number" id="hours" placeholder="e.g., 4" min="1" max="16">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Exam Date</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-calendar"></i>
+                    <input type="date" id="examDate">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Weak Topics / Subjects</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <input type="text" id="weakSubjects" placeholder="Topics you find difficult">
+                </div>
+            </div>
+            <button class="main-btn" onclick="validateAndBuild()">
+                <span>Generate Plan</span>
+                <i class="fa-solid fa-bolt"></i>
+            </button>
         </div>
 
-        <div class="output" id="output">
-
-            <h2 id="studentTitle">Study Plan</h2>
-
-            <div class="subject-tags" id="subjectTags"></div>
-
-            <div class="countdown" id="countdown"></div>
-
-            <div class="plan-box">
-                <h3>📅 Daily Study Schedule</h3>
-                <ul id="dailyPlan"></ul>
+        <div class="glass-panel output-dashboard" id="outputDashboard">
+            <div class="dash-header">
+                <div>
+                    <h2 style="margin:0; font-size:1.4rem;" id="outName">Your Plan</h2>
+                    <span id="outSubjects" style="font-size:0.85rem; color:var(--text-muted);">Subjects</span>
+                </div>
+                <div class="badge" id="outBadge">0 Days Left</div>
             </div>
 
-            <div class="plan-box">
-                <h3>🎯 Weekly Goals</h3>
-                <ul id="weeklyGoals"></ul>
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="val" id="metHours">0h</div>
+                    <div class="lbl">Daily Target</div>
+                </div>
+                <div class="metric-card">
+                    <div class="val" id="metMode">Standard</div>
+                    <div class="lbl">Study Style</div>
+                </div>
             </div>
 
-            <div class="plan-box">
-                <h3>🔁 Revision Strategy</h3>
-                <ul id="revisionPlan"></ul>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin:0; font-size:1.1rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted)">Your Daily Schedule</h3>
+                <button class="copy-btn" onclick="copyPlanToClipboard()">
+                    <i class="fa-regular fa-copy"></i> <span>Copy Plan</span>
+                </button>
             </div>
-
+            
+            <div id="timelineContainer"></div>
         </div>
-
     </div>
-
-</div>
-
 </div>
 
 <script>
-
-function generatePlan(){
-
-    const name = document.getElementById("name").value;
-    const subjects = document.getElementById("subjects").value;
-    const hours = parseInt(document.getElementById("hours").value);
-    const examDate = document.getElementById("examDate").value;
-    const weakSubjects = document.getElementById("weakSubjects").value;
-
-    if(!name || !subjects || !hours || !examDate){
-
-        alert("Please fill all required fields.");
-        return;
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const target = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', target);
+        localStorage.setItem('theme', target);
+        document.getElementById('themeText').innerText = target === 'dark' ? 'Light Mode' : 'Dark Mode';
     }
 
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("output").style.display = "none";
+    window.onload = function() {
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if(savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        
+        document.getElementById('studentName').value = localStorage.getItem('planner_name') || '';
+        document.getElementById('subjects').value = localStorage.getItem('planner_subjects') || '';
+        document.getElementById('hours').value = localStorage.getItem('planner_hours') || '';
+        document.getElementById('examDate').value = localStorage.getItem('planner_date') || '';
+        document.getElementById('weakSubjects').value = localStorage.getItem('planner_weak') || '';
 
-    setTimeout(() => {
+        if(localStorage.getItem('planner_name')) {
+            validateAndBuild();
+        }
+    };
 
-        const subjectArray = subjects.split(",");
-        const weakArray = weakSubjects.split(",");
+    function validateAndBuild() {
+        const name = document.getElementById('studentName').value.trim();
+        const subjects = document.getElementById('subjects').value.trim();
+        const hours = parseInt(document.getElementById('hours').value);
+        const examDateVal = document.getElementById('examDate').value;
+        const weak = document.getElementById('weakSubjects').value.trim();
 
-        document.getElementById("studentTitle").innerText =
-            `${name}'s AI Study Plan`;
+        if(!name || !subjects || !hours || !examDateVal) {
+            alert('❌ Please fill in all the standard boxes.');
+            return;
+        }
+        if(hours < 1 || hours > 16) {
+            alert('❌ Please enter daily hours between 1 and 16.');
+            return;
+        }
 
-        // Subject Tags
-
-        let tagsHTML = "";
-
-        subjectArray.forEach(subject => {
-
-            tagsHTML += `
-                <div class="tag">
-                    ${subject.trim()}
-                </div>
-            `;
-        });
-
-        document.getElementById("subjectTags").innerHTML = tagsHTML;
-
-        // Countdown
+        localStorage.setItem('planner_name', name);
+        localStorage.setItem('planner_subjects', subjects);
+        localStorage.setItem('planner_hours', hours);
+        localStorage.setItem('planner_date', examDateVal);
+        localStorage.setItem('planner_weak', weak);
 
         const today = new Date();
-        const exam = new Date(examDate);
+        const exam = new Date(examDateVal);
+        const diffTime = exam - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        const diff = exam - today;
+        if(diffDays < 0) {
+            alert('❌ The exam date cannot be in the past.');
+            return;
+        }
 
-        const daysLeft = Math.ceil(diff / (1000 * 60 * 60 * 24));
+        let pacingStrategy = "Regular Normal Learning";
+        let subTimeFactor = 0.6; 
+        let bottleneckTimeFactor = 0.3;
 
-        document.getElementById("countdown").innerHTML =
-            `⏳ ${daysLeft} days remaining until your exam`;
+        if(diffDays <= 15) {
+            pacingStrategy = "Fast Crash Course Mode 🔥";
+            subTimeFactor = 0.4;
+            bottleneckTimeFactor = 0.5;
+        } else if (diffDays <= 45) {
+            pacingStrategy = "Steady Milestone Pace";
+        }
 
-        // Daily Plan
+        document.getElementById('outName').innerText = `${name}'s Roadmap`;
+        document.getElementById('outSubjects').innerText = `Subjects: ${subjects}`;
+        document.getElementById('outBadge').innerText = `${diffDays} Days Left`;
+        document.getElementById('metHours').innerText = `${hours} Hours`;
+        document.getElementById('metMode').innerText = pacingStrategy;
 
-        let dailyHTML = "";
+        const coreHours = (hours * subTimeFactor).toFixed(1);
+        const weakHours = (hours * bottleneckTimeFactor).toFixed(1);
+        const reviewHours = (hours - coreHours - (weak ? weakHours : 0)).toFixed(1);
 
-        const perSubjectHours =
-            (hours / subjectArray.length).toFixed(1);
+        let layoutHTML = `
+            <div class="timeline-item">
+                <div class="time-tag">Step 1 — Warmup (15-30 Mins)</div>
+                <h4>Quick Mind Refresh</h4>
+                <p>Read through your previous study notes quickly to wake up your brain and remember what you learned yesterday.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="time-tag">Step 2 — Main Session (${coreHours} Hours)</div>
+                <h4>Deep Focus on Core Topics: [${subjects.split(',')[0]}]</h4>
+                <p>Use your best energy hours to understand main textbook concepts, theories, and solve heavy problems.</p>
+            </div>
+        `;
 
-        subjectArray.forEach(subject => {
-
-            dailyHTML += `
-                <li>
-                    Study <strong>${subject.trim()}</strong>
-                    for ${perSubjectHours} hour(s)
-                    with active recall practice.
-                </li>
+        if(weak) {
+            layoutHTML += `
+                <div class="timeline-item" style="border-left-color: #ef4444;">
+                    <div class="time-tag">Step 3 — Difficult Areas Focus (${weakHours} Hours)</div>
+                    <h4>Fixing Your Bottlenecks: [${weak}]</h4>
+                    <p>Spend extra dedicated time solving problems specifically from your weak subjects to make them stronger.</p>
+                </div>
             `;
-        });
+        }
 
-        dailyHTML += `
-            <li>
-                Take 10-minute breaks after every study session.
-            </li>
-
-            <li>
-                End your day with quick revision notes.
-            </li>
+        layoutHTML += `
+            <div class="timeline-item" style="border-left-color: var(--accent);">
+                <div class="time-tag">Step 4 — Final Revision (${reviewHours > 0 ? reviewHours : 0.5} Hours)</div>
+                <h4>Daily Summary & Memory Lockdown</h4>
+                <p>Quickly review everything you studied today and write down short bullet points to lock the memory perfectly.</p>
+            </div>
         `;
 
-        document.getElementById("dailyPlan").innerHTML = dailyHTML;
+        document.getElementById('timelineContainer').innerHTML = layoutHTML;
+        
+        const dashboard = document.getElementById('outputDashboard');
+        dashboard.style.display = 'block';
+        dashboard.scrollIntoView({ behavior: 'smooth' });
+    }
 
-        // Weekly Goals
-
-        let weeklyHTML = "";
-
-        subjectArray.forEach(subject => {
-
-            weeklyHTML += `
-                <li>
-                    Complete 2 chapters and 1 mock test in
-                    <strong>${subject.trim()}</strong>.
-                </li>
-            `;
+    // 2. New Copy to Clipboard Functionality
+    function copyPlanToClipboard() {
+        const name = document.getElementById('outName').innerText;
+        const subjects = document.getElementById('outSubjects').innerText;
+        const days = document.getElementById('outBadge').innerText;
+        const target = document.getElementById('metHours').innerText;
+        const style = document.getElementById('metMode').innerText;
+        
+        let textToCopy = `=== ${name} ===\n${subjects}\nTimeline: ${days}\nDaily Target: ${target}\nStudy Style: ${style}\n\n`;
+        
+        const items = document.querySelectorAll('.timeline-item');
+        items.forEach(item => {
+            const tag = item.querySelector('.time-tag').innerText;
+            const title = item.querySelector('h4').innerText;
+            const desc = item.querySelector('p').innerText;
+            textToCopy += `📍 ${tag}\n🔹 ${title}\n📝 ${desc}\n\n`;
         });
 
-        weeklyHTML += `
-            <li>
-                Revise all completed topics every Sunday.
-            </li>
-        `;
-
-        document.getElementById("weeklyGoals").innerHTML = weeklyHTML;
-
-        // Revision Plan
-
-        let revisionHTML = "";
-
-        weakArray.forEach(subject => {
-
-            if(subject.trim() !== ""){
-
-                revisionHTML += `
-                    <li>
-                        Spend extra 30 minutes improving
-                        <strong>${subject.trim()}</strong>.
-                    </li>
-                `;
-            }
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('📋 Study plan copied to clipboard successfully!');
+        }).catch(err => {
+            alert('Failed to copy plan: ' + err);
         });
-
-        revisionHTML += `
-            <li>
-                Solve previous year question papers every weekend.
-            </li>
-
-            <li>
-                Use flashcards and short notes before sleeping.
-            </li>
-        `;
-
-        document.getElementById("revisionPlan").innerHTML = revisionHTML;
-
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("output").style.display = "block";
-
-    }, 1800);
-
-}
-
+    }
 </script>
 
 </body>

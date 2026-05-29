@@ -9,7 +9,7 @@
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            --panel-bg: rgba(255, 255, 255, 0.85);
+            --panel-bg: rgba(255, 255, 255, 0.9);
             --border-color: rgba(0, 0, 0, 0.08);
             --text-main: #0f172a;
             --text-muted: #475569;
@@ -23,14 +23,14 @@
 
         [data-theme="dark"] {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-            --panel-bg: rgba(30, 41, 59, 0.85);
+            --panel-bg: rgba(30, 41, 59, 0.9);
             --border-color: rgba(255, 255, 255, 0.08);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
             --primary: #6366f1;
             --primary-glow: rgba(99, 102, 241, 0.2);
             --accent: #34d399;
-            --card-inner: rgba(15, 23, 42, 0.3);
+            --card-inner: rgba(15, 23, 42, 0.4);
             --danger: #f87171;
             --warning: #fbbf24;
         }
@@ -95,11 +95,16 @@
         }
         button.secondary-btn:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
 
-        /* Output Dashboard View */
+        /* Empty State */
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; opacity: 0.7; }
+        .empty-state h3 { margin: 0 0 8px 0; color: var(--text-main); font-size: 1.3rem; }
+
+        /* Output Dashboard */
         .output-dashboard { display: none; }
         .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px; }
 
-        /* Stage 2 Redesign: Today's Mission Cards Layout */
+        /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
         @media (min-width: 480px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
         .stat-card { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center; }
@@ -107,16 +112,23 @@
         .stat-card .val { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
         .stat-card .lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
+        /* Issue #8: Today's First Task Card (What should I do right now?) */
+        .action-now-card { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 14px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2); }
+        [data-theme="dark"] .action-now-card { background: linear-gradient(135deg, #b45309 0%, #78350f 100%); }
+        .action-now-card h4 { margin: 0 0 4px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
+        .action-now-card .task-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+        .action-now-card .task-meta { font-size: 0.8rem; opacity: 0.95; display: flex; gap: 12px; }
+
+        /* Insights Container */
+        .insights-container { background: var(--card-inner); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 15px; font-size: 0.85rem; }
+        .insight-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+        .insight-item:last-child { margin-bottom: 0; }
+
         /* Progress Bar Module */
         .progress-container { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 15px; }
         .progress-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: var(--text-muted); }
         .progress-bar-wrapper { background: rgba(0,0,0,0.05); height: 8px; border-radius: 10px; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); width: 0%; height: 100%; transition: width 0.5s ease; }
-
-        /* Subject Weight Distribution */
-        .dist-container { display: flex; flex-direction: column; gap: 6px; background: var(--card-inner); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 15px; }
-        .dist-row { display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; }
-        .dist-pct { color: var(--primary); font-weight: 700; }
+        .progress-fill { background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); width: 0%; height: 100%; transition: width 0.4s ease; }
 
         .export-actions { display: flex; gap: 6px; margin-bottom: 15px; width: 100%; }
         .action-btn { background: var(--card-inner); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; min-width: 0; }
@@ -124,7 +136,7 @@
 
         .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin: 15px 0 8px 0; border-left: 3px solid var(--primary); padding-left: 6px; font-weight: 700; }
 
-        /* Stage 2: Today's Mission Interactive Checkboxes */
+        /* Interactive Checkboxes */
         .tracker-list { display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 15px; }
         @media(min-width: 480px) { .tracker-list { grid-template-columns: repeat(2, 1fr); } }
         .tracker-item { display: flex; align-items: center; gap: 8px; background: var(--card-inner); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
@@ -136,22 +148,22 @@
         .timeline-item h4 { margin: 1px 0; font-size: 0.9rem; }
         .timeline-item p { margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
 
-        /* Weekly Calendar Block View Matrix */
-        .calendar-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-top: 8px; }
+        /* Weekly Calendar Specific Matrix Blocks */
+        .calendar-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 6px; margin-top: 8px; }
         @media(min-width: 550px) { .calendar-grid { grid-template-columns: repeat(5, 1fr); } }
-        .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 8px; border-radius: 8px; text-align: center; }
+        .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
         .calendar-day .day-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-        .calendar-day .day-task { font-size: 0.8rem; font-weight: 600; margin-top: 2px; color: var(--primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .calendar-day .day-task { font-size: 0.8rem; font-weight: 700; margin-top: 4px; color: var(--primary); }
+        .calendar-day .day-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; line-height: 1.2; }
 
-        footer { text-align: center; margin-top: 30px; padding: 12px; border-top: 1px solid var(--border-color); font-size: 0.75rem; color: var(--text-muted); }
-        footer a { color: var(--primary); text-decoration: none; margin: 0 6px; }
+        footer { text-align: center; margin-top: 40px; padding: 15px; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <nav>
-        <div class="logo"><i class="fa-solid fa-compass"></i> AI Horizon Study Coach</div>
+        <div class="logo"><i class="fa-solid fa-graduation-cap"></i> AI Horizon Study Coach</div>
         <div class="nav-right">
             <div class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="streakDisplay">Streak: 0 Days</span></div>
             <button class="theme-toggle" onclick="toggleTheme()">
@@ -162,63 +174,81 @@
 
     <header>
         <h1>🎯 AI Horizon Study Coach</h1>
-        <p>Custom Tailored Strategic Learning Roadmaps for All Lifelong Learners</p>
+        <p>Personalized study plans built around your learning goals and personal timings</p>
     </header>
 
     <div class="grid-layout">
         <div class="glass-panel" id="inputFormPanel">
             <div class="form-group">
-                <label>Learner Name</label>
-                <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="studentName" placeholder="Your Name"></div>
-                <div class="error-msg" id="err_studentName">Learner name is required</div>
+                <label>Your Name</label>
+                <div class="input-wrapper"><i class="fa-solid fa-user"></i><input type="text" id="studentName" placeholder="Enter your name"></div>
+                <div class="error-msg" id="err_studentName">Name is required</div>
             </div>
             <div class="form-group">
-                <label>Topics / Subjects to Master</label>
+                <label>What do you want to learn?</label>
                 <div class="input-wrapper"><i class="fa-solid fa-book"></i><input type="text" id="subjects" placeholder="e.g., Python, UI Design, Marketing"></div>
-                <div class="error-msg" id="err_subjects">Please specify at least one target topic</div>
+                <div class="error-msg" id="err_subjects">Please specify at least one topic</div>
             </div>
             <div class="form-group">
-                <label>Daily Commitment Hours</label>
+                <label>Daily Study Hours</label>
                 <div class="input-wrapper"><i class="fa-solid fa-clock"></i><input type="number" id="hours" placeholder="e.g., 3" min="1" max="16"></div>
-                <div class="error-msg" id="err_hours">Enter target hours between 1 and 16</div>
+                <div class="error-msg" id="err_hours">Enter hours between 1 and 16</div>
             </div>
             <div class="form-group">
                 <label>Target Timeline (In Months)</label>
-                <div class="input-wrapper"><i class="fa-solid fa-hourglass-half"></i><input type="number" id="timelineMonths" placeholder="e.g., 3 Months" min="1" max="24"></div>
-                <div class="error-msg" id="err_timelineMonths">Please select a timeline between 1 to 24 months</div>
+                <div class="input-wrapper"><i class="fa-solid fa-hourglass-half"></i><input type="number" id="timelineMonths" placeholder="e.g., 3" min="1" max="24"></div>
+                <div class="error-msg" id="err_timelineMonths">Select a timeline between 1 to 24 months</div>
             </div>
             <div class="form-group">
-                <label>Learning Pace Preference</label>
+                <label>Learning Pace</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-gauge-high"></i>
                     <select id="learningPace">
-                        <option value="balanced">Balanced Strategy (Standard)</option>
-                        <option value="slow">Deep Focus (Slow & Steady)</option>
+                        <option value="balanced">Balanced Mode (Standard)</option>
+                        <option value="slow">Deep Focus Mode (Slow & Steady)</option>
                         <option value="fast">Sprint Mode (Fast Track)</option>
                     </select>
                 </div>
             </div>
             <div class="form-group">
                 <label>Weak / Focus Areas (Optional)</label>
-                <div class="input-wrapper"><i class="fa-solid fa-triangle-exclamation"></i><input type="text" id="weakSubjects" placeholder="e.g., Pointers, Data Structs"></div>
+                <div class="input-wrapper"><i class="fa-solid fa-triangle-exclamation"></i><input type="text" id="weakSubjects" placeholder="e.g., OOP Concepts, Pointers"></div>
             </div>
             
             <div class="btn-group">
                 <button class="main-btn" onclick="validateAndBuild()">
-                    <span>Formulate Learning Matrix</span><i class="fa-solid fa-bolt"></i>
+                    <span>Generate Study Plan</span><i class="fa-solid fa-bolt"></i>
                 </button>
                 <button class="secondary-btn" id="resetBtn" onclick="resetPlanFlow()">Reset Workspace</button>
             </div>
         </div>
 
-        <div class="glass-panel output-dashboard" id="outputDashboard">
+        <div class="glass-panel" id="emptyStatePanel" style="width: 100%; box-sizing: border-box;">
+            <div class="empty-state">
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <h3>👋 Welcome</h3>
+                <p>Enter your learning goals and generate your personalized study roadmap.</p>
+            </div>
+        </div>
+
+        <div class="glass-panel output-dashboard" id="outputDashboard" style="width: 100%; box-sizing: border-box;">
             <div id="printArea">
+                
+                <div class="action-now-card" id="actionNowCard">
+                    <h4><i class="fa-solid fa-circle-play"></i> TODAY'S FIRST TASK</h4>
+                    <div class="task-title" id="actionTaskTitle">Study Python Basics</div>
+                    <div class="task-meta">
+                        <span><i class="fa-regular fa-clock"></i> <span id="actionTaskDuration">45 Mins</span></span>
+                        <span><i class="fa-regular fa-compass"></i> Goal: Build core concepts & syntax</span>
+                    </div>
+                </div>
+
                 <div class="dash-header">
                     <div>
-                        <h2 style="margin:0; font-size:1.2rem;" id="outName">Learning Command Room</h2>
+                        <h2 style="margin:0; font-size:1.2rem;" id="outName">Study Dashboard</h2>
                         <span id="outSubjects" style="font-size:0.75rem; color:var(--text-muted);">Active Tracks</span>
                     </div>
-                    <div class="badge" id="outBadge" style="background:rgba(79, 70, 229, 0.1); color:var(--primary); border-color:var(--primary);">Self-Paced Track</div>
+                    <div class="badge" id="outBadge" style="padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; background:rgba(79, 70, 229, 0.1); color:var(--primary);">Self-Paced Track</div>
                 </div>
 
                 <div class="stats-grid">
@@ -230,7 +260,7 @@
                     <div class="stat-card">
                         <div class="icon">⏳</div>
                         <div class="val" id="statTotalHours">0h</div>
-                        <div class="lbl">Total Hours Est.</div>
+                        <div class="lbl">Total Hours</div>
                     </div>
                     <div class="stat-card">
                         <div class="icon">📊</div>
@@ -238,38 +268,38 @@
                         <div class="lbl">Today's Progress</div>
                     </div>
                     <div class="stat-card">
-                        <div class="icon">⚠️</div>
-                        <div class="val" id="statWeakCount">None</div>
-                        <div class="lbl">Weak Hotspots</div>
+                        <div class="icon">📈</div>
+                        <div class="val" id="statWeeklyLog">0 / 7 Days</div>
+                        <div class="lbl">Weekly Goals</div>
                     </div>
                 </div>
 
                 <div class="progress-container">
                     <div class="progress-header">
-                        <span>TIMELINE TRACKING PROGRESS STATUS</span>
-                        <span id="progressPctText">0%</span>
+                        <span>TODAY'S TASK COMPLETION PROGRESS</span>
+                        <span id="progressPctText">0% Complete</span>
                     </div>
                     <div class="progress-bar-wrapper">
                         <div class="progress-fill" id="progressBarFill"></div>
                     </div>
                 </div>
 
-                <div class="section-title">Topic Weight Resource Splits</div>
-                <div class="dist-container" id="distributionContainer"></div>
+                <div class="section-title">Strategic Insights</div>
+                <div class="insights-container" id="insightsContainer"></div>
 
                 <div class="export-actions" data-html2pdf-ignore="true">
-                    <button class="action-btn" onclick="copyPlanToClipboard()"><i class="fa-regular fa-copy"></i> Copy Matrix</button>
-                    <button class="action-btn" onclick="downloadTxt()"><i class="fa-regular fa-file-lines"></i> TXT</button>
-                    <button class="action-btn" onclick="downloadPdf()"><i class="fa-regular fa-file-pdf"></i> PDF</button>
+                    <button class="action-btn" onclick="copyPlanToClipboard()"><i class="fa-regular fa-copy"></i> Copy Plan</button>
+                    <button class="action-btn" onclick="downloadTxt()"><i class="fa-regular fa-file-lines"></i> Download TXT</button>
+                    <button class="action-btn" onclick="downloadPdf()"><i class="fa-regular fa-file-pdf"></i> Download PDF</button>
                 </div>
 
-                <div class="section-title" data-html2pdf-ignore="true">Today's Mission Tasks</div>
+                <div class="section-title" data-html2pdf-ignore="true">Today's Checklists</div>
                 <div class="tracker-list" id="trackerList" data-html2pdf-ignore="true"></div>
 
-                <div class="section-title">Personalized Daily Time Allocations</div>
+                <div class="section-title">Daily Time Allocation</div>
                 <div id="timelineContainer"></div>
 
-                <div class="section-title">Weekly Subject Calendar Block View</div>
+                <div class="section-title">Weekly Learning Goals</div>
                 <div class="calendar-grid" id="calendarContainer"></div>
             </div>
         </div>
@@ -277,12 +307,8 @@
 </div>
 
 <footer>
-    <p>© 2026 AI Horizon Study Coach. Built for lifelong structured growth.</p>
-    <p>
-        <a href="#" onclick="alert('AI Horizon Coach: Dynamic client-side open learning systems engine framework.')">About</a> | 
-        <a href="#" onclick="alert('Privacy Parameters: Data arrays stay local in native browser cache configurations.')">Privacy Policy</a> | 
-        <a href="#" onclick="alert('Support: interface-engine@aihorizon.io')">Contact Hub</a>
-    </p>
+    <p>Built by <strong>Venkat</strong> | Version 1.0</p>
+    <p style="font-size: 0.75rem; margin-top: 4px; opacity: 0.8;">AI Horizon Study Coach • Simple & Trustworthy Architecture</p>
 </footer>
 
 <script>
@@ -296,12 +322,14 @@
 
     window.onload = function() {
         const savedTheme = localStorage.getItem('theme') || 'light';
-        if(savedTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+        if(savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeText').innerText = 'Light Mode';
+        }
         
-        // Stage 2: Genuine Streak Checking Module Setup
+        // Load persistent metrics smoothly
         let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
         document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
-        document.getElementById('statStreak').innerText = `${currentStreak} Days`;
 
         document.getElementById('studentName').value = localStorage.getItem('h_name') || '';
         document.getElementById('subjects').value = localStorage.getItem('h_subs') || '';
@@ -343,7 +371,6 @@
 
         if(!pass) return;
 
-        // Secure parameters allocation safely inside local storage cache configurations
         localStorage.setItem('h_name', name);
         localStorage.setItem('h_subs', subInput);
         localStorage.setItem('h_hours', hours);
@@ -352,61 +379,72 @@
         localStorage.setItem('h_weak', weak);
         
         document.getElementById('resetBtn').style.display = 'block';
+        document.getElementById('emptyStatePanel').style.display = 'none';
 
         const subjectArray = subInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        const primeSubject = subjectArray[0];
         const totalEstDays = months * 30;
         const totalEstHours = Math.max(hours * totalEstDays, 0);
         
         document.getElementById('statTotalHours').innerText = `${totalEstHours}h`;
-        document.getElementById('statWeakCount').innerText = weak ? '1 Area' : 'None';
         document.getElementById('outBadge').innerText = `${months} Month Track (${pace.toUpperCase()})`;
-        document.getElementById('outName').innerText = `${name}'s Mission Command`;
+        document.getElementById('outName').innerText = `${name}'s Study Dashboard`;
         document.getElementById('outSubjects').innerText = `Target Tracks: ${subInput}`;
 
-        // Compute Flexible Completion Metrics Visualizations
-        let completionEstimationPct = 15;
-        if(pace === 'fast') completionEstimationPct = 45;
-        if(pace === 'slow') completionEstimationPct = 10;
-        document.getElementById('progressPctText').innerText = `${completionEstimationPct}% Mastery Estimated`;
-        document.getElementById('progressBarFill').style.width = `${completionEstimationPct}%`;
+        // Dynamic Setup for Issue #8: Today's First Task
+        document.getElementById('actionTaskTitle').innerText = weak ? `Master ${weak}` : `Study ${primeSubject} Core Fundamentals`;
+        document.getElementById('actionTaskDuration').innerText = hours > 1 ? "45 Minutes" : "30 Minutes";
 
-        // Splits Calculations
-        let distributionHTML = '';
+        // Setup Insights without corporate jargon
+        let insightsHTML = `<div class="insight-item">🚀 <strong>Primary Goal:</strong> Focused on expanding your skills in [${subInput}].</div>`;
         if(weak) {
-            distributionHTML += `<div class="dist-row"><span style="font-weight:600;">⚠️ Focus Zone [${weak}]</span><span class="dist-pct">45% Weight</span></div>`;
-            const share = Math.round(55 / subjectArray.length);
-            subjectArray.forEach(s => { distributionHTML += `<div class="dist-row"><span>📚 Core Module [${s}]</span><span class="dist-pct">${share}% Weight</span></div>`; });
+            insightsHTML += `<div class="insight-item" style="color:var(--danger)">⚠️ <strong>Focus Area:</strong> [${weak}] was selected as your weak spot. We recommend spending at least 45 minutes daily on this topic.</div>`;
         } else {
-            const share = Math.round(100 / subjectArray.length);
-            subjectArray.forEach(s => { distributionHTML += `<div class="dist-row"><span>📚 Core Module [${s}]</span><span class="dist-pct">${share}% Weight</span></div>`; });
+            insightsHTML += `<div class="insight-item" style="color:var(--accent)">✅ <strong>Balanced Routine:</strong> Spreading study sessions evenly across all specified subjects.</div>`;
         }
-        document.getElementById('distributionContainer').innerHTML = distributionHTML;
+        document.getElementById('insightsContainer').innerHTML = insightsHTML;
 
-        // Daily Formulations Injections Engine
+        // Clean Student-centric Allocation Timelines
         let remHours = hours - 0.5;
         let timelineHTML = `
-            <div class="timeline-item"><div class="time-tag">30 Mins</div><h4>Mind Activation Warmup Sequence</h4><p>Review core flashcards and technical schemas to clear cognitive fatigue blocks.</p></div>
+            <div class="timeline-item"><div class="time-tag">30 Mins</div><h4>Warmup & Review</h4><p>Review yesterday's notes and open flashcards to refresh your memory.</p></div>
         `;
         if(weak && remHours > 0) {
-            let wAlloc = parseFloat((remHours * 0.45).toFixed(1)); remHours = parseFloat((remHours - wAlloc).toFixed(1));
-            timelineHTML += `<div class="timeline-item" style="border-left-color: var(--danger);"><div class="time-tag">${wAlloc} Hours</div><h4>Focus Session Block: [${weak}]</h4><p>Target difficult application areas directly to overcome specific knowledge bottlenecks.</p></div>`;
+            let wAlloc = parseFloat((remHours * 0.40).toFixed(1)); 
+            if(wAlloc > 0) {
+                remHours = parseFloat((remHours - wAlloc).toFixed(1));
+                timelineHTML += `<div class="timeline-item" style="border-left-color: var(--danger);"><div class="time-tag">${wAlloc} Hours</div><h4>Weak Topic Focus: [${weak}]</h4><p>Solve specific problems and review core concepts around this focus area.</p></div>`;
+            }
         }
         if(subjectArray.length > 0 && remHours > 0) {
             const share = parseFloat((remHours / subjectArray.length).toFixed(1));
             subjectArray.forEach(s => {
                 if(share > 0) {
-                    timelineHTML += `<div class="timeline-item" style="border-left-color: #3b82f6;"><div class="time-tag">${share} Hours</div><h4>Core Domain Drilling: [${s}]</h4><p>Deep-dive conceptual materials, compile custom notes, and map execution setups.</p></div>`;
+                    timelineHTML += `<div class="timeline-item" style="border-left-color: var(--primary);"><div class="time-tag">${share} Hours</div><h4>Core Study Block: [${s}]</h4><p>Read standard materials, write clean summaries, and run practical exercises.</p></div>`;
                 }
             });
         }
         document.getElementById('timelineContainer').innerHTML = timelineHTML;
 
-        // Generate Weekly Calendar Block Matrix Matrix
-        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        // Dynamic Calendar with specific topics (Python/Generic smart fallback)
+        const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+        let topicsFallbacks = ['Variables & Syntax', 'Functions & Loops', 'Core Architecture', 'Practical Exercises', 'Weekly Review Test'];
+        
+        if(primeSubject.toLowerCase().includes('python')) {
+            topicsFallbacks = ['Variables & Types', 'Control Flows & Loops', 'Functions & Scopes', 'OOP Concepts Basics', 'Python Mini Project'];
+        } else if(primeSubject.toLowerCase().includes('design')) {
+            topicsFallbacks = ['Color Theory Rules', 'Typography Baselines', 'UI Layout Grid Kits', 'Component Design Labs', 'Mockup Review'];
+        }
+
         let calHTML = '';
-        days.forEach((d, i) => {
-            const task = subjectArray[i % subjectArray.length] || 'General Synthesis';
-            calHTML += `<div class="calendar-day"><div class="day-lbl">${d}</div><div class="day-task">${task}</div></div>`;
+        daysList.forEach((d, i) => {
+            const currentSub = subjectArray[i % subjectArray.length] || primeSubject;
+            calHTML += `
+                <div class="calendar-day">
+                    <div class="day-lbl">${d}</div>
+                    <div class="day-task">${topicsFallbacks[i]}</div>
+                    <div class="day-sub">[${currentSub}]</div>
+                </div>`;
         });
         document.getElementById('calendarContainer').innerHTML = calHTML;
 
@@ -417,13 +455,15 @@
         dash.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Stage 2: Clean Dynamic Mission Checkboxes Setup
+    // Dynamic Tracking Progress Modules
     function setupTrackerBoxes() {
-        const missions = ['Warmup Session Complete', 'Core Domain Materials Drilled', 'Weak Area Hotspot Practice', 'Daily Revision Summary Logged'];
-        let trackerHTML = ''; let ticked = 0;
+        const tasks = ["Review Yesterday's Notes", "Complete Core Study Material", "Practice Difficult Topics", "Log Daily Summary & Progress"];
+        let trackerHTML = ''; 
+        let tickedCount = 0;
         
-        missions.forEach((m, i) => {
-            const done = localStorage.getItem(`h_miss_${i}`) === 'true'; if(done) ticked++;
+        tasks.forEach((m, i) => {
+            const done = localStorage.getItem(`h_m_v3_${i}`) === 'true'; 
+            if(done) tickedCount++;
             trackerHTML += `
                 <label class="tracker-item ${done ? 'completed' : ''}" id="lbl_${i}">
                     <input type="checkbox" id="chk_${i}" onchange="handleCheck(${i})" ${done ? 'checked' : ''}>
@@ -433,70 +473,97 @@
         });
         document.getElementById('trackerList').innerHTML = trackerHTML;
         
-        const pct = Math.round((ticked / 4) * 100);
-        document.getElementById('statCompletion').innerText = `${pct}%`;
+        const pct = Math.round((tickedCount / tasks.length) * 100);
+        updateProgressUI(pct);
     }
 
-    // Stage 2: True Streak Increment System Verification Flow Models
+    // True Date-Based Streak Verification Flow (Fix Issue #1)
     function handleCheck(i) {
         const box = document.getElementById(`chk_${i}`);
         const label = document.getElementById(`lbl_${i}`);
-        localStorage.setItem(`h_miss_${i}`, box.checked);
+        localStorage.setItem(`h_m_v3_${i}`, box.checked);
+        
         if(box.checked) label.classList.add('completed'); else label.classList.remove('completed');
         
-        let ticked = 0; 
-        for(let j=0; j<4; j++) { if(localStorage.getItem(`h_miss_${j}`) === 'true') ticked++; }
+        let tickedCount = 0; 
+        for(let j=0; j<4; j++) { 
+            if(localStorage.getItem(`h_m_v3_${j}`) === 'true') tickedCount++; 
+        }
         
-        const pct = Math.round((ticked / 4) * 100);
-        document.getElementById('statCompletion').innerText = `${pct}%`;
+        const pct = Math.round((tickedCount / 4) * 100);
+        updateProgressUI(pct);
 
-        // Real Streak Calculation Logic Mechanism
+        // Date-locked streak logic loop
         if(pct === 100) {
-            let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
-            currentStreak += 1;
-            localStorage.setItem('real_streak_val', currentStreak);
-            document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
-            document.getElementById('statStreak').innerText = `${currentStreak} Days`;
+            const todayStr = new Date().toDateString();
+            const lastStreakDate = localStorage.getItem('last_completed_date');
+            
+            if(lastStreakDate !== todayStr) {
+                let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
+                currentStreak += 1;
+                localStorage.setItem('real_streak_val', currentStreak);
+                localStorage.setItem('last_completed_date', todayStr);
+                
+                document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
+                document.getElementById('statStreak').innerText = `${currentStreak} Days`;
+                document.getElementById('statWeeklyLog').innerText = `1 / 7 Days`;
+            }
         }
     }
 
+    function updateProgressUI(pct) {
+        document.getElementById('statCompletion').innerText = `${pct}%`;
+        document.getElementById('progressPctText').innerText = `${pct}% Complete`;
+        document.getElementById('progressBarFill').style.width = `${pct}%`;
+    }
+
     function resetPlanFlow() {
+        let currentStreak = localStorage.getItem('real_streak_val') || 0;
+        let lastDate = localStorage.getItem('last_completed_date');
+        let theme = localStorage.getItem('theme') || 'light';
         localStorage.clear();
+        
+        localStorage.setItem('real_streak_val', currentStreak);
+        if(lastDate) localStorage.setItem('last_completed_date', lastDate);
+        localStorage.setItem('theme', theme);
+
         document.getElementById('studentName').value = '';
         document.getElementById('subjects').value = '';
         document.getElementById('hours').value = '';
         document.getElementById('timelineMonths').value = '';
         document.getElementById('weakSubjects').value = '';
+        
         clearInlineErrors();
         document.getElementById('outputDashboard').style.display = 'none';
+        document.getElementById('emptyStatePanel').style.display = 'block';
         document.getElementById('resetBtn').style.display = 'none';
-        document.getElementById('streakDisplay').innerText = `Streak: 0 Days`;
-        document.getElementById('statStreak').innerText = `0 Days`;
+        
+        updateProgressUI(0);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function copyPlanToClipboard() {
         let txt = `=== AI HORIZON COACH ROADMAP ===\n` + document.getElementById('printArea').innerText;
-        navigator.clipboard.writeText(txt).then(() => alert('📋 Learning roadmap copied successfully!'));
+        navigator.clipboard.writeText(txt).then(() => alert('📋 Plan copied to clipboard!'));
     }
 
     function downloadTxt() {
         let txt = `=== AI HORIZON COACH ROADMAP ===\n` + document.getElementById('printArea').innerText;
         const b = new Blob([txt], { type: 'text/plain' });
         const url = URL.createObjectURL(b);
-        const a = document.createElement('a'); a.href = url; a.download = 'learning-matrix.txt'; a.click();
+        const a = document.createElement('a'); a.href = url; a.download = 'study-plan.txt'; a.click();
     }
 
     function downloadPdf() {
         const element = document.getElementById('printArea');
+        const currentTheme = document.documentElement.getAttribute('data-theme');
         document.documentElement.setAttribute('data-theme', 'light');
         const options = {
-            margin: 10, filename: 'learning-roadmap.pdf', image: { type: 'jpeg', quality: 0.98 },
+            margin: 10, filename: 'study-plan.pdf', image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
         html2pdf().set(options).from(element).save().then(() => {
-            const theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', theme);
+            if(currentTheme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
         });
     }
 </script>

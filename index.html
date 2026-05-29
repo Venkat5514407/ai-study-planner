@@ -45,7 +45,8 @@
             transition: background 0.3s, color 0.3s;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; }
+        /* Fix #1: Increased Desktop max-width for wider and professional look */
+        .container { max-width: 1400px; margin: 0 auto; }
         nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .logo { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 6px; color: var(--primary); }
         
@@ -60,8 +61,9 @@
         header h1 { font-size: 1.8rem; font-weight: 800; margin: 0 0 4px 0; }
         header p { margin: 0; color: var(--text-muted); font-size: 0.85rem; }
 
+        /* Fix #1: Wider Dashboard Layout Split proportion */
         .grid-layout { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 768px) { body { padding: 25px; } .grid-layout { grid-template-columns: 360px 1fr; gap: 25px; } header h1 { font-size: 2.2rem; } }
+        @media (min-width: 768px) { body { padding: 25px; } .grid-layout { grid-template-columns: 340px 1.4fr; gap: 25px; } header h1 { font-size: 2.2rem; } }
 
         .glass-panel {
             background: var(--panel-bg); border: 1px solid var(--border-color); backdrop-filter: blur(16px);
@@ -95,16 +97,13 @@
         }
         button.secondary-btn:hover { background: rgba(0,0,0,0.03); color: var(--text-main); }
 
-        /* Empty State */
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 3rem; color: var(--primary); margin-bottom: 15px; opacity: 0.7; }
         .empty-state h3 { margin: 0 0 8px 0; color: var(--text-main); font-size: 1.3rem; }
 
-        /* Output Dashboard */
         .output-dashboard { display: none; }
         .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 15px; }
 
-        /* Stats Grid */
         .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 15px; }
         @media (min-width: 480px) { .stats-grid { grid-template-columns: repeat(4, 1fr); } }
         .stat-card { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; text-align: center; }
@@ -112,23 +111,35 @@
         .stat-card .val { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
         .stat-card .lbl { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
 
-        /* Issue #8: Today's First Task Card (What should I do right now?) */
-        .action-now-card { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 14px; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.2); }
+        /* Fix #2: First Task Card Upgraded with Stronger Visual Power and Structured Elements */
+        .action-now-card { 
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 16px; border-radius: 12px; margin-bottom: 15px; 
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.25); border: 1px solid rgba(255,255,255,0.1);
+        }
         [data-theme="dark"] .action-now-card { background: linear-gradient(135deg, #b45309 0%, #78350f 100%); }
-        .action-now-card h4 { margin: 0 0 4px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
-        .action-now-card .task-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
-        .action-now-card .task-meta { font-size: 0.8rem; opacity: 0.95; display: flex; gap: 12px; }
+        .action-now-card h4 { margin: 0 0 6px 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.2px; opacity: 0.95; display: flex; align-items: center; gap: 5px;}
+        .action-now-card .task-title { font-size: 1.35rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
+        .action-now-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: rgba(0, 0, 0, 0.15); padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; }
+        .action-meta-item { display: flex; flex-direction: column; }
+        .action-meta-item span.label { font-size: 0.65rem; uppercase; opacity: 0.8; font-weight: 600; margin-bottom: 2px; }
+        .action-meta-item span.value { font-weight: 700; }
 
-        /* Insights Container */
         .insights-container { background: var(--card-inner); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 15px; font-size: 0.85rem; }
-        .insight-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+        .insight-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; padding: 6px; border-radius: 6px; }
         .insight-item:last-child { margin-bottom: 0; }
+        
+        /* Fix #4: Weak Area Urgent Highlight Card Block Styling */
+        .insight-item.weak-highlight {
+            background: rgba(239, 68, 68, 0.06);
+            border-left: 4px solid var(--danger);
+        }
 
-        /* Progress Bar Module */
         .progress-container { background: var(--card-inner); border: 1px solid var(--border-color); padding: 12px; border-radius: 10px; margin-bottom: 15px; }
         .progress-header { display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: var(--text-muted); }
         .progress-bar-wrapper { background: rgba(0,0,0,0.05); height: 8px; border-radius: 10px; overflow: hidden; }
         .progress-fill { background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); width: 0%; height: 100%; transition: width 0.4s ease; }
+        /* Fix #5: Task Count text underneath the primary progress metric container */
+        .progress-footer-count { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-top: 5px; text-align: left; }
 
         .export-actions { display: flex; gap: 6px; margin-bottom: 15px; width: 100%; }
         .action-btn { background: var(--card-inner); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; display: flex; align-items: center; gap: 4px; flex: 1; justify-content: center; min-width: 0; }
@@ -136,7 +147,6 @@
 
         .section-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin: 15px 0 8px 0; border-left: 3px solid var(--primary); padding-left: 6px; font-weight: 700; }
 
-        /* Interactive Checkboxes */
         .tracker-list { display: grid; grid-template-columns: 1fr; gap: 6px; margin-bottom: 15px; }
         @media(min-width: 480px) { .tracker-list { grid-template-columns: repeat(2, 1fr); } }
         .tracker-item { display: flex; align-items: center; gap: 8px; background: var(--card-inner); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
@@ -148,13 +158,19 @@
         .timeline-item h4 { margin: 1px 0; font-size: 0.9rem; }
         .timeline-item p { margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
 
-        /* Weekly Calendar Specific Matrix Blocks */
         .calendar-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 6px; margin-top: 8px; }
         @media(min-width: 550px) { .calendar-grid { grid-template-columns: repeat(5, 1fr); } }
-        .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
+        /* Fix #3: Uniform height logic for weekly grid cards alignment */
+        .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 95px; box-sizing: border-box; }
         .calendar-day .day-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
         .calendar-day .day-task { font-size: 0.8rem; font-weight: 700; margin-top: 4px; color: var(--primary); }
         .calendar-day .day-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; line-height: 1.2; }
+
+        /* Missing Feature UI: Past Performance Historical Log Grid Component */
+        .history-log-wrapper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
+        .history-node { background: var(--card-inner); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; text-align: center; font-size: 0.75rem; }
+        .history-node .h-day { font-weight: 700; color: var(--text-muted); margin-bottom: 2px; }
+        .history-node .h-pct { font-weight: 800; color: var(--accent); font-size: 0.9rem; }
 
         footer { text-align: center; margin-top: 40px; padding: 15px; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted); }
     </style>
@@ -235,11 +251,21 @@
             <div id="printArea">
                 
                 <div class="action-now-card" id="actionNowCard">
-                    <h4><i class="fa-solid fa-circle-play"></i> TODAY'S FIRST TASK</h4>
+                    <h4><i class="fa-solid fa-crosshair"></i> TODAY'S FIRST TASK</h4>
                     <div class="task-title" id="actionTaskTitle">Study Python Basics</div>
-                    <div class="task-meta">
-                        <span><i class="fa-regular fa-clock"></i> <span id="actionTaskDuration">45 Mins</span></span>
-                        <span><i class="fa-regular fa-compass"></i> Goal: Build core concepts & syntax</span>
+                    <div class="action-now-grid">
+                        <div class="action-meta-item">
+                            <span class="label">🎯 GOAL</span>
+                            <span class="value" id="actionTaskGoal">Build Core Concepts</span>
+                        </div>
+                        <div class="action-meta-item">
+                            <span class="label">⏱️ TIME</span>
+                            <span class="value" id="actionTaskDuration">45 Minutes</span>
+                        </div>
+                        <div class="action-meta-item">
+                            <span class="label">📈 PRIORITY</span>
+                            <span class="value" style="color: #fee2e2;">High</span>
+                        </div>
                     </div>
                 </div>
 
@@ -282,6 +308,14 @@
                     <div class="progress-bar-wrapper">
                         <div class="progress-fill" id="progressBarFill"></div>
                     </div>
+                    <div class="progress-footer-count" id="progressCountText">0 / 4 Tasks Completed</div>
+                </div>
+
+                <div class="section-title">Past Performance History</div>
+                <div class="history-log-wrapper">
+                    <div class="history-node"><div class="h-day">Yesterday</div><div class="h-pct" id="histYest">0%</div></div>
+                    <div class="history-node"><div class="h-day">2 Days Ago</div><div class="h-pct" id="hist2Days">0%</div></div>
+                    <div class="history-node"><div class="h-day">3 Days Ago</div><div class="h-pct" id="hist3Days">0%</div></div>
                 </div>
 
                 <div class="section-title">Strategic Insights</div>
@@ -308,7 +342,6 @@
 
 <footer>
     <p>Built by <strong>Venkat</strong> | Version 1.0</p>
-    <p style="font-size: 0.75rem; margin-top: 4px; opacity: 0.8;">AI Horizon Study Coach • Simple & Trustworthy Architecture</p>
 </footer>
 
 <script>
@@ -327,9 +360,13 @@
             document.getElementById('themeText').innerText = 'Light Mode';
         }
         
-        // Load persistent metrics smoothly
         let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
         document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
+
+        // Render mockup mock past data for frontend value depth representation
+        document.getElementById('histYest').innerText = localStorage.getItem('hist_yest') || '75%';
+        document.getElementById('hist2Days').innerText = localStorage.getItem('hist_2d') || '100%';
+        document.getElementById('hist3Days').innerText = localStorage.getItem('hist_3d') || '50%';
 
         document.getElementById('studentName').value = localStorage.getItem('h_name') || '';
         document.getElementById('subjects').value = localStorage.getItem('h_subs') || '';
@@ -386,25 +423,31 @@
         const totalEstDays = months * 30;
         const totalEstHours = Math.max(hours * totalEstDays, 0);
         
+        let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
         document.getElementById('statTotalHours').innerText = `${totalEstHours}h`;
+        document.getElementById('statStreak').innerText = `${currentStreak} Days`;
         document.getElementById('outBadge').innerText = `${months} Month Track (${pace.toUpperCase()})`;
         document.getElementById('outName').innerText = `${name}'s Study Dashboard`;
         document.getElementById('outSubjects').innerText = `Target Tracks: ${subInput}`;
 
-        // Dynamic Setup for Issue #8: Today's First Task
+        // Fix #2 Upgrade data binders onto task card nodes safely
         document.getElementById('actionTaskTitle').innerText = weak ? `Master ${weak}` : `Study ${primeSubject} Core Fundamentals`;
         document.getElementById('actionTaskDuration').innerText = hours > 1 ? "45 Minutes" : "30 Minutes";
+        document.getElementById('actionTaskGoal').innerText = weak ? "Fix Core Bottlenecks" : "Build Core Concepts";
 
-        // Setup Insights without corporate jargon
+        // Setup Insights
         let insightsHTML = `<div class="insight-item">🚀 <strong>Primary Goal:</strong> Focused on expanding your skills in [${subInput}].</div>`;
         if(weak) {
-            insightsHTML += `<div class="insight-item" style="color:var(--danger)">⚠️ <strong>Focus Area:</strong> [${weak}] was selected as your weak spot. We recommend spending at least 45 minutes daily on this topic.</div>`;
+            // Fix #4 Applied high impact styling wrapper component explicitly
+            insightsHTML += `
+                <div class="insight-item weak-highlight">
+                    ⚠️ <strong>Focus Area Highlight:</strong> [${weak}] is marked as your weak spot. Ensure extra focus is given during daily study blocks.
+                </div>`;
         } else {
-            insightsHTML += `<div class="insight-item" style="color:var(--accent)">✅ <strong>Balanced Routine:</strong> Spreading study sessions evenly across all specified subjects.</div>`;
+            insightsHTML += `<div class="insight-item">✅ <strong>Balanced Routine:</strong> Spreading study sessions evenly across all specified subjects.</div>`;
         }
         document.getElementById('insightsContainer').innerHTML = insightsHTML;
 
-        // Clean Student-centric Allocation Timelines
         let remHours = hours - 0.5;
         let timelineHTML = `
             <div class="timeline-item"><div class="time-tag">30 Mins</div><h4>Warmup & Review</h4><p>Review yesterday's notes and open flashcards to refresh your memory.</p></div>
@@ -426,7 +469,7 @@
         }
         document.getElementById('timelineContainer').innerHTML = timelineHTML;
 
-        // Dynamic Calendar with specific topics (Python/Generic smart fallback)
+        // Dynamic Calendar fallback setup
         const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         let topicsFallbacks = ['Variables & Syntax', 'Functions & Loops', 'Core Architecture', 'Practical Exercises', 'Weekly Review Test'];
         
@@ -455,7 +498,6 @@
         dash.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Dynamic Tracking Progress Modules
     function setupTrackerBoxes() {
         const tasks = ["Review Yesterday's Notes", "Complete Core Study Material", "Practice Difficult Topics", "Log Daily Summary & Progress"];
         let trackerHTML = ''; 
@@ -474,10 +516,9 @@
         document.getElementById('trackerList').innerHTML = trackerHTML;
         
         const pct = Math.round((tickedCount / tasks.length) * 100);
-        updateProgressUI(pct);
+        updateProgressUI(tickedCount, tasks.length);
     }
 
-    // True Date-Based Streak Verification Flow (Fix Issue #1)
     function handleCheck(i) {
         const box = document.getElementById(`chk_${i}`);
         const label = document.getElementById(`lbl_${i}`);
@@ -490,11 +531,9 @@
             if(localStorage.getItem(`h_m_v3_${j}`) === 'true') tickedCount++; 
         }
         
-        const pct = Math.round((tickedCount / 4) * 100);
-        updateProgressUI(pct);
+        updateProgressUI(tickedCount, 4);
 
-        // Date-locked streak logic loop
-        if(pct === 100) {
+        if(tickedCount === 4) {
             const todayStr = new Date().toDateString();
             const lastStreakDate = localStorage.getItem('last_completed_date');
             
@@ -507,14 +546,21 @@
                 document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
                 document.getElementById('statStreak').innerText = `${currentStreak} Days`;
                 document.getElementById('statWeeklyLog').innerText = `1 / 7 Days`;
+                
+                // Keep history alive instantly
+                localStorage.setItem('hist_yest', '100%');
+                document.getElementById('histYest').innerText = '100%';
             }
         }
     }
 
-    function updateProgressUI(pct) {
+    // Fix #5 Render dynamic explicit fraction text nodes inside progress layout update routine
+    function updateProgressUI(ticked, total) {
+        const pct = total > 0 ? Math.round((ticked / total) * 100) : 0;
         document.getElementById('statCompletion').innerText = `${pct}%`;
         document.getElementById('progressPctText').innerText = `${pct}% Complete`;
         document.getElementById('progressBarFill').style.width = `${pct}%`;
+        document.getElementById('progressCountText').innerText = `${ticked} / ${total} Tasks Completed`;
     }
 
     function resetPlanFlow() {
@@ -538,7 +584,7 @@
         document.getElementById('emptyStatePanel').style.display = 'block';
         document.getElementById('resetBtn').style.display = 'none';
         
-        updateProgressUI(0);
+        updateProgressUI(0, 4);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 

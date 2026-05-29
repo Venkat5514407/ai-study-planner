@@ -164,13 +164,15 @@
         .timeline-item p { margin: 0; font-size: 0.8rem; color: var(--text-muted); line-height: 1.3; }
 
         .calendar-grid { display: grid; grid-template-columns: repeat(1, 1fr); gap: 6px; margin-top: 8px; }
-        @media(min-width: 550px) { .calendar-grid { grid-template-columns: repeat(5, 1fr); } }
+        /* Shifted to 7 Columns for complete weekend visibility */
+        @media(min-width: 768px) { .calendar-grid { grid-template-columns: repeat(7, 1fr); } }
+        @media(min-width: 480px) and (max-width: 767px) { .calendar-grid { grid-template-columns: repeat(4, 1fr); } }
+        
         .calendar-day { background: var(--card-inner); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 95px; box-sizing: border-box; }
         .calendar-day .day-lbl { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
         .calendar-day .day-task { font-size: 0.8rem; font-weight: 700; margin-top: 4px; color: var(--primary); }
         .calendar-day .day-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; line-height: 1.2; }
 
-        /* Fix #1: Dynamic 0% Start Visual History Component */
         .history-log-wrapper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
         .history-node { background: var(--card-inner); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 8px; text-align: center; font-size: 0.75rem; }
         .history-node .h-day { font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
@@ -313,7 +315,7 @@
                     </div>
                     <div class="stat-card" onclick="scrollToSection('calendarContainer')">
                         <div class="icon">📈</div>
-                        <div class="val" id="statWeeklyLog">0 / 5 Days</div>
+                        <div class="val" id="statWeeklyLog">0 / 7 Days</div>
                         <div class="lbl">Weekly Goals</div>
                     </div>
                 </div>
@@ -363,7 +365,7 @@
                 <div class="section-title">Daily Time Allocation</div>
                 <div id="timelineContainer"></div>
 
-                <div class="section-title">Weekly Learning Goals</div>
+                <div class="section-title">Weekly Learning Goals Matrix (7-Day Cycle)</div>
                 <div class="calendar-grid" id="calendarContainer"></div>
             </div>
         </div>
@@ -376,11 +378,11 @@
 </div>
 
 <footer>
-    <p>Built by <strong>Venkat</strong> | Version 1.0</p>
+    <p>Built by <strong>Venkat</strong> | Version 1.1</p>
 </footer>
 
 <script>
-    // List of keys this app uses (To prevent safe reset vulnerabilities)
+    // List of keys this app uses (Safe storage logic architecture separation)
     const APP_STORAGE_KEYS = [
         'h_name', 'h_subs', 'h_hours', 'h_months', 'h_pace', 'h_weak',
         'real_streak_val', 'last_completed_date', 'theme',
@@ -438,8 +440,8 @@
             mainBtn.disabled = false;
             
             validateAndBuild();
-            showToast("✨ Roadmap generated successfully!");
-        }, 1500);
+            showToast("✨ 7-Day Matrix Generated Successfully!");
+        }, 1200);
     }
 
     window.onload = function() {
@@ -467,7 +469,6 @@
         }
     };
 
-    // Fix #1: Real History Logic with fallback to 0% for brand new profiles
     function renderPastHistoryMetrics() {
         const yestVal = localStorage.getItem('real_hist_yest') || '0%';
         const day2Val = localStorage.getItem('real_hist_2d') || '0%';
@@ -520,7 +521,6 @@
         document.getElementById('resetBtn').style.display = 'block';
         document.getElementById('emptyStatePanel').style.display = 'none';
 
-        // Fix #5: Intelligent split handling commas or pure spaces organically
         let subjectArray = [];
         if(subInput.includes(',')) {
             subjectArray = subInput.split(',').map(s => s.trim()).filter(s => s.length > 0);
@@ -538,8 +538,8 @@
         document.getElementById('statTotalHours').innerText = `${totalEstHours}h`;
         document.getElementById('statStreak').innerText = `${currentStreak} Days`;
         
-        // Fix #2: Fully Computed dynamic weekly goal metrics tracking engine
-        document.getElementById('statWeeklyLog').innerText = `${completedDays} / 5 Days`;
+        // Dynamic Weekly Goal Tracker out of 7 Days
+        document.getElementById('statWeeklyLog').innerText = `${completedDays} / 7 Days`;
 
         document.getElementById('outBadge').innerText = `${months} Month Track (${pace.toUpperCase()})`;
         document.getElementById('outName').innerText = `${name}'s Study Dashboard`;
@@ -578,13 +578,14 @@
         }
         document.getElementById('timelineContainer').innerHTML = timelineHTML;
 
-        const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-        let topicsFallbacks = ['Variables & Syntax', 'Functions & Loops', 'Core Architecture', 'Practical Exercises', 'Weekly Review Test'];
+        // Upgraded Layout array to accommodate 7 full days cleanly
+        const daysList = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        let topicsFallbacks = ['Variables & Syntax', 'Functions & Loops', 'Core Architecture', 'Practical Exercises', 'Weekly Review Test', 'Weekend Hackathon Lab', 'Deep Notes Revision'];
         
         if(primeSubject.toLowerCase().includes('python')) {
-            topicsFallbacks = ['Variables & Types', 'Control Flows & Loops', 'Functions & Scopes', 'OOP Concepts Basics', 'Python Mini Project'];
+            topicsFallbacks = ['Variables & Types', 'Control Flows & Loops', 'Functions & Scopes', 'OOP Concepts Basics', 'Python Mini Project', 'Data Structures Intro', 'Weekly Core Assessment'];
         } else if(primeSubject.toLowerCase().includes('design')) {
-            topicsFallbacks = ['Color Theory Rules', 'Typography Baselines', 'UI Layout Grid Kits', 'Component Design Labs', 'Mockup Review'];
+            topicsFallbacks = ['Color Theory Rules', 'Typography Baselines', 'UI Layout Grid Kits', 'Component Design Labs', 'Mockup Review Blueprint', 'Portfolio Draft Review', 'Design Critiques Session'];
         }
 
         let calHTML = '';
@@ -639,7 +640,6 @@
         
         updateProgressUI(tickedCount, 4);
 
-        // Fix #3: Robust Streak Engine and Computed Counters
         if(tickedCount === 4) {
             const todayStr = new Date().toDateString();
             const lastStreakDate = localStorage.getItem('last_completed_date');
@@ -648,20 +648,20 @@
                 let currentStreak = parseInt(localStorage.getItem('real_streak_val')) || 0;
                 let completedDays = parseInt(localStorage.getItem('completed_days_count')) || 0;
 
-                // Authentic verification logic validation
                 if (lastStreakDate) {
                     const yesterday = new Date();
                     yesterday.setDate(yesterday.getDate() - 1);
                     if (new Date(lastStreakDate).toDateString() === yesterday.toDateString()) {
-                        currentStreak += 1; // broken gap detection safety rule checked
+                        currentStreak += 1; 
                     } else {
-                        currentStreak = 1; // Reset streak if user skipped days
+                        currentStreak = 1; 
                     }
                 } else {
-                    currentStreak = 1; // First day ever
+                    currentStreak = 1; 
                 }
 
-                completedDays = (completedDays % 5) + 1; // Loops clean 1-5 days bounds smoothly
+                // Upgraded to wrap and loop perfectly at 7 Days
+                completedDays = (completedDays % 7) + 1; 
                 
                 localStorage.setItem('real_streak_val', currentStreak);
                 localStorage.setItem('completed_days_count', completedDays);
@@ -669,9 +669,8 @@
                 
                 document.getElementById('streakDisplay').innerText = `Streak: ${currentStreak} Days`;
                 document.getElementById('statStreak').innerText = `${currentStreak} Days`;
-                document.getElementById('statWeeklyLog').innerText = `${completedDays} / 5 Days`;
+                document.getElementById('statWeeklyLog').innerText = `${completedDays} / 7 Days`;
                 
-                // Roll and save real historical states organically
                 localStorage.setItem('real_hist_3d', localStorage.getItem('real_hist_2d') || '0%');
                 localStorage.setItem('real_hist_2d', localStorage.getItem('real_hist_yest') || '0%');
                 localStorage.setItem('real_hist_yest', '100%');
@@ -690,7 +689,6 @@
         document.getElementById('progressCountText').innerText = `${ticked} / ${total} Tasks Completed`;
     }
 
-    // Fix #4: Secure Reset targeting app keys explicitly without breaking external local storage properties
     function resetPlanFlow() {
         APP_STORAGE_KEYS.forEach(key => {
             if(key !== 'theme' && key !== 'real_streak_val' && key !== 'last_completed_date' && !key.startsWith('real_hist_')) {
